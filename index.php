@@ -3,27 +3,12 @@
     <head>
         <meta charset="ISO-8859-1">
         <title>Brother's Cup PHP</title>
-<script>
-function validar(){
-    var em = document.getElementsByName("equipo_Miguel")[0].value;
-    var ej = document.getElementsByName("equipo_Javi")[0].value;
-    var ec = document.getElementsByName("equipo_Chechu")[0].value;
-    
-    if (em == "null" || ej == "null" || ec == "null"){
-        alert("Debe seleccionar un equipo para cada jugador.");
-        return false;
-    }else{
-        if (em == ej || em == ec || ej == ec){
-            alert("Cada jugador debe tener un equipo DIFERENTE.");
-            return false;
-        }else
-            return true;
-    }
-}  
-</script>
+         <script src="Scripts/checker.js"></script> 
     </head>
     <body>
 <?php
+
+include 'FuncionesPHP/funciones.php';
 //Quitamos Warning
 //error_reporting(E_ERROR | E_PARSE);
 
@@ -87,21 +72,6 @@ if($_POST)
 
 
 
-function listaEquipos ($jugador){
-    echo "<p> ".$jugador.": ";
-    $query = "SELECT nombre from equipo;";
-    global $conn;
-    $result = mysqli_query($conn, $query);
-    echo "<select name=\"equipo_".$jugador."\">";
-    echo "<option value=\"null\">Seleccione un equipo</option>";
-    while($row = mysqli_fetch_assoc($result))
-    {
-        $equipo = $row["nombre"];
-        echo "<option value=\".".$equipo."\">".$equipo."</option>";
-    }
-    echo "</select>";
-    echo "</p>";
-}
 
 
 listaEquipos("Miguel");
@@ -111,7 +81,7 @@ listaEquipos("Chechu");
 ?>
     
         <br>
-        <form name="fequipos" action="principal.php" onsubmit="return validar()">
+        <form name="fequipos" action="principal.php" onsubmit="return validar_eleccion_equipos()">
             <input type="submit" value="COMENZAR">
         </form>
         
@@ -120,9 +90,6 @@ listaEquipos("Chechu");
             Equipo: <input type="text" name="nombre_equipo_nuevo">
          <input type="submit" value="Registrar">
       </form>
-        
-
-        
-        
+         
     </body>
 </html>
