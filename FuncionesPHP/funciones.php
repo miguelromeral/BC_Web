@@ -9,7 +9,7 @@ function listaEquipos ($jugador){
     while($row = mysqli_fetch_assoc($result))
     {
         $equipo = $row["nombre"];
-        echo "<option value=\".".$equipo."\">".$equipo."</option>";
+        echo "<option value=\"".$equipo."\">".$equipo."</option>";
     }
     echo "</select>";
     echo "</p>";

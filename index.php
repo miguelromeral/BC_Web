@@ -7,6 +7,18 @@
     </head>
     <body>
 <?php
+   if(@$_SESSION['en_curso'] == true){
+?>
+      <p>
+      Ya hay una edición en curso. 
+      <form action="principal.php" method="get">
+            <button type="submit">IR AL PANEL PRINCIPAL</button>
+        </form>
+      </p>
+<?php 
+   }else{
+
+
 
 include 'FuncionesPHP/funciones.php';
 include 'FuncionesPHP/consultas.php';
@@ -47,14 +59,15 @@ if($_POST)
     }
 }
 
+?>
+        <form name="fequipos" action="principal.php" onsubmit="return validar_eleccion_equipos()" method="post">
+       
+            <?php
 listaEquipos("Miguel");
 listaEquipos("Javi");
 listaEquipos("Chechu");
-
 ?>
     
-        <br>
-        <form name="fequipos" action="principal.php" onsubmit="return validar_eleccion_equipos()">
             <input type="submit" value="COMENZAR">
         </form>
         
@@ -69,6 +82,6 @@ listaEquipos("Chechu");
          <input type="submit" value="Registrar">
       </form>
        
-        
+   <?php } ?>
     </body>
 </html>
