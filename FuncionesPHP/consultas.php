@@ -46,6 +46,8 @@ function getTablaEquiposRegistrados($conn){
         while($row = mysqli_fetch_assoc($result))
         {
             echo "<tr><td>";
+            echo $row["id"];
+            echo "<tr><td>";
             getImagenEquipoID($conn, 40, 40, $row["id"]);
             echo "</td><td>";
             echo $row["nombre"];
@@ -56,5 +58,25 @@ function getTablaEquiposRegistrados($conn){
     }else{
         return "";
     }
+}
+
+function getIDEquipo($conn, $equipo){
+    $query = "SELECT id FROM equipo WHERE nombre = '$equipo';";
+    $result = mysqli_query($conn, $query);
+    if ($result){
+        $row = mysqli_fetch_assoc($result); 
+        return $row["id"]; 
+    }
+    return -1;
+}
+
+function getIDUsuario($conn, $usuario){
+    $query = "SELECT id FROM usuario WHERE nombre = '$usuario';";
+    $result = mysqli_query($conn, $query);
+    if ($result){
+        $row = mysqli_fetch_assoc($result); 
+        return $row["id"]; 
+    }
+    return -1;
 }
 

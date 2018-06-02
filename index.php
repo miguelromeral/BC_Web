@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php session_start(); ?>
 <html>
     <head>
         <meta charset="ISO-8859-1">
@@ -26,7 +27,7 @@ include 'FuncionesPHP/consultas.php';
 //error_reporting(E_ERROR | E_PARSE);
 
 $conn = conectarse();
-       
+$_SESSION['en_partido'] = false;
         
 ?>
         
@@ -37,6 +38,10 @@ $conn = conectarse();
 $ne = getNumeroEdiciones($conn);
 if ($ne != -1){
     echo "<h2>Edición ".($ne + 1)."ª</h2>";
+    $_SESSION['edicion'] = $ne + 1;
+    if ($ne == 0){
+        registrarUsuarios($conn);
+    }
 }else{
     echo "ERROR EN LA BASE DE DATOS";
 }
