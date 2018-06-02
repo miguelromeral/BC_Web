@@ -15,7 +15,8 @@ if($_POST){
     <head>
         <meta charset="ISO-8859-1">
         <title>Brother's Cup PHP</title>
-         <script src="Scripts/checker.js"></script> 
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="Scripts/checker.js"></script> 
     </head>
     <body>
 <?php
@@ -38,7 +39,7 @@ $_SESSION['en_partido'] = true;
         <p>
     <center>
 
-        <form name="fpartido" action="principal.php" onsubmit="return confirmar_final()" method="post">
+        <form name="fpartido" id="fpartido" action="principal.php" onsubmit="return confirmar_final()" method="post">
             <input type="hidden" name="el" value="<?= $el ?>" />
             <input type="hidden" name="ev" value="<?= $ev ?>" />
             <input type="hidden" name="ul" value="<?= $ul ?>" />
@@ -53,8 +54,13 @@ $_SESSION['en_partido'] = true;
                     <td>Goles</td>
                     <td>TA</td>
                     <td>TR</td>
+                    
+                    <?php if($tipo == "Final"){ ?>
+                    
                     <td>Añadido</td>
                     <td>Ganador Penaltis</td>
+                    
+                    <?php } ?>
                 </tr>
                 <tr>
                     <td><?= $el ?></td>
@@ -63,8 +69,13 @@ $_SESSION['en_partido'] = true;
                     <td><input type="number" name="gl" min="0" value="0"></td>
                     <td><input type="number" name="tal" min="0" value="0"></td>
                     <td><input type="number" name="trl" min="0" max="5" value="0"></td>
+                    
+                    <?php if($tipo == "Final"){ ?>
+                    
                     <td><input type="checkbox" name="pr" value="true">Prórroga<br>
-                    <td><input type="radio" name="ganp" value="<?= getIDEquipo($conn, $el)?>">Gané en penaltis<br></td>
+                    <td><input id="ganp1" type="radio" name="ganp" value="<?= getIDEquipo($conn, $el)?>">Gané en penaltis<br></td>
+                
+                    <?php } ?>
                 </tr>
                 
                 <tr>
@@ -74,8 +85,14 @@ $_SESSION['en_partido'] = true;
                     <td><input type="number" name="gv" min="0" value="0"></td>
                     <td><input type="number" name="tav" min="0" value="0"></td>
                     <td><input type="number" name="trv" min="0" max="5" value="0"></td>
+                    
+                    <?php if($tipo == "Final"){ ?>
+                    
                     <td><input type="checkbox" name="pen" value="true">Penaltis<br>
-                    <td><input type="radio" name="ganp" value="<?= getIDEquipo($conn, $ev)?>">Gané en penaltis<br></td>
+                    <td><input id="ganp2" type="radio" name="ganp" value="<?= getIDEquipo($conn, $ev)?>">Gané en penaltis<br>
+                        <a onclick="limpiarGanp()">Resetear ganador</a>
+                    </td>
+                    <?php } ?>
                 </tr>
                 
             </table>

@@ -61,7 +61,7 @@ if($_POST){
 //error_reporting(E_ERROR | E_PARSE);
 
        
-        
+$ed = $_SESSION['edicion'];
 $em = $_SESSION['Miguel'];
 $ej = $_SESSION['Javi'];
 $ec = $_SESSION['Chechu'];
@@ -138,6 +138,10 @@ if(@$_SESSION['nueva_edicion'] == true){
     <input type="submit" value="EMPEZAR">
     
     </form>
+    
+    <p>
+        <?php getTablaPartidosEdicion($conn, $ed); ?>
+    </p>
     
     
     

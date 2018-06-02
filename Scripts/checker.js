@@ -35,13 +35,77 @@ function validar_equipos_partido(){
 }  
 
 function confirmar_final(){
-    if (confirm("¿Está seguro de que quiere finalizar el partido?")) {
-        return true;
+    if (comprobarIntegridadPartido()) {
+        if (confirm("¿Está seguro de que quiere finalizar el partido?")) {
+            return true;
+        }
+        return false;
+    }else{
+        return false;
     }
-    return false;
+}
+
+// Fuente: http://www.dyn-web.com/tutorials/forms/radio/get-selected.php
+function getRadioVal(form, name) {
+    var val;
+    // get list of radio buttons with specified name
+    var radios = form.elements[name];
+    
+    // loop through list of radio buttons
+    for (var i=0, len=radios.length; i<len; i++) {
+        if ( radios[i].checked ) { // radio checked?
+            val = radios[i].value; // if so, hold its value in val
+            break; // and break out of for loop
+        }
+    }
+    return val; // return value of checked radio or undefined if none checked
 }
 
 function comprobarIntegridadPartido(){
     var gl = document.getElementsByName("gl")[0].value;
     var gv = document.getElementsByName("gv")[0].value;
+    var pr = document.getElementsByName("pr")[0].checked;
+    var pen = document.getElementsByName("pen")[0].checked;
+    var tipo = document.getElementsByName("tipo")[0].value;
+    var ganp = getRadioVal( document.getElementById('fpartido'), 'ganp' );
+    
+    if (tipo === "Final") {
+        if (gl === gv){
+            if(pr){
+                if(pen){
+                    if (typeof ganp === 'undefined'){
+                        alert("Debe haber un ganador de penaltis");
+                        return false;
+                    }
+                }else{
+                    alert("No puede acabar el partido sin penaltis.");
+                    return false;
+                }
+            }else{
+                alert("No puede acabar el partido sin prórroga.");
+                return false;
+            }
+        }
+    }else{
+        if (pr){
+            alert("No puede haber prórroga en un partido de Fase de Grupos");
+            return false;
+        }
+        if (pen){
+            alert("No puede haber penaltis en un partido de Fase de Grupos");
+            return false;
+        }
+        if (typeof ganp !== 'undefined'){
+            alert("No puede haber ganador de penaltis en un partido de Fase de Grupos");
+            return false;
+        }
+    }
+    return true;
+}
+
+function limpiarGanp(){
+   var ele = document.getElementsByName("ganp");
+   for(var i=0;i<ele.length;i++)
+      ele[i].checked = false;
+     return true;
 }
