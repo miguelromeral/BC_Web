@@ -37,6 +37,16 @@ function getImagenEquipoNombre($conn, $nombre, $w = 305, $h = 305){
     }
 }
 
+
+function getUsuarioFromID($conn, $id){
+    $query = "SELECT nombre FROM usuario WHERE id= $id;";
+    $result = mysqli_query($conn, $query);
+    if ($result){
+        $row = mysqli_fetch_assoc($result); 
+        return $row["nombre"];
+    }
+}
+
 function getTablaEquiposRegistrados($conn){
     if ($conn){
         echo "<table border=\"1\">";
@@ -62,7 +72,7 @@ function getTablaEquiposRegistrados($conn){
 
 function getTablaPartidosEdicion($conn, $edicion){
     if ($conn){
-        echo "<table border=\"1\">";
+        echo "<table>";
         $query = "SELECT * FROM partido where edicion = $edicion;";
         $result = mysqli_query($conn, $query);
         // IDP, Tipo, #Num_ED, el, gl, gv, ev, PR, PEN, Ganador, Penaltis
@@ -149,4 +159,144 @@ function getIDUsuario($conn, $usuario){
     return -1;
 }
 
+function anadirDatosMarcador($jug, $yo, $rival, $i){
+    $gf = $yo["goles"];
+    $gc = $rival["goles"];
+    $jug[$i][4] += $gf;
+    $jug[$i][5] += $gc;
+    $jug[$i][6] += ($gf - $gc);
+    $jug[$i][7] += $yo["ta"];
+    $jug[$i][8] += $yo["tr"];
+    if ($gf > $gc){
+        $jug[$i][1] ++;
+        $jug[$i][0] += 3;
+    }elseif ($gf < $gc){
+        $jug[$i][3] ++;
+    }else{
+        $jug[$i][2] ++;
+        $jug[$i][0] ++;
+    }
+    return $jug;
+}
 
+
+function cambiarFilas($cl, $i, $j){
+    $aux = $cl[$i];
+    $cl[$i] = $cl[$j];
+    $cl[$j] = $aux;
+    return $cl;
+}
+
+function ordenarDosFilasClasificacion($cl, $p, $s){
+    $cambio = false;
+    $prim = $cl[$p];
+    $seg = $cl[$s];
+    
+    // PTS[0], V[1], E[2], D[3], GF[4], GC[5], DG[6], TA[7], TR[8]
+    if ($prim[0] < $seg[0]){
+        $cambio = true;
+    }elseif($prim[0] == $seg[0]){
+        if($prim[6] < $seg[6]){
+            $cambio = true;
+        }elseif($prim[6] == $seg[6]){
+            if($prim[4] < $seg[4]){
+                $cambio = true;
+            }elseif($prim[4] == $seg[4]){
+                $pts_neg_prim = $prim[7] + $prim[8] * 2;
+                $pts_neg_seg = $seg[7] + $seg[8] * 2;
+                if($pts_neg_prim > $pts_neg_seg){
+                    $cambio = true;
+                }
+            }
+        }
+    }
+    
+    if ($cambio){
+        $cl = cambiarFilas($cl, $p, $s);
+    }
+    return $cl;
+}
+
+function ordenarClasificacion($cl){
+    $cl = ordenarDosFilasClasificacion($cl, 0, 1);
+    $cl = ordenarDosFilasClasificacion($cl, 1, 2);
+    $cl = ordenarDosFilasClasificacion($cl, 0, 1);
+    $cl = ordenarDosFilasClasificacion($cl, 1, 2);
+    return $cl;
+}
+
+function getClasificacion($conn, $edicion){
+    // PTS[0], V[1], E[2], D[3], GF[4], GC[5], DG[6], TA[7], TR[8]
+    //$m = [0,0,0,0,0,0,0,1];
+    $m = array_fill(0, 9, 0);
+    $m[9] = 1;
+    $j = array_fill(0, 9, 0);
+    $j[9] = 2;
+    $c = array_fill(0, 9, 0);
+    $c[9] = 3;
+    array_push($m, 1);
+    array_push($j, 2);
+    array_push($c, 3);
+    $jug = [$m, $j, $c];
+    $query = "SELECT id FROM partido WHERE edicion = $edicion and tipo = 'Fase de Grupos';";
+    $result = mysqli_query($conn, $query);
+    while($partido = mysqli_fetch_assoc($result))
+    {
+        for ($i=0; $i<3; $i++){ 
+            $q2 = "SELECT * FROM marcador WHERE partido = ".$partido["id"].";";
+            $r1 = mysqli_query($conn, $q2);
+            $l = mysqli_fetch_assoc($r1);
+            $v = mysqli_fetch_assoc($r1);
+            if ($l["usuario"] == ($i + 1)){
+                $jug = anadirDatosMarcador($jug, $l, $v, $i);
+            }elseif ($v["usuario"] == ($i + 1)){
+                $jug = anadirDatosMarcador($jug, $v, $l, $i);
+            }
+        }
+    }
+    return ordenarClasificacion($jug);
+    //return $jug;
+}
+
+function printClasificacion($conn, $edicion){
+    if($conn){
+        $cl = getClasificacion($conn, $edicion);
+        ?>
+            <table border="1">
+                <tr>
+                    <td>POS</td>
+                    <td>Usuario</td>
+                    <td>PTS</td>
+                    <td>V</td>
+                    <td>E</td>
+                    <td>D</td>
+                    <td>GF</td>
+                    <td>GC</td>
+                    <td>DG</td>
+                    <td>TA</td>
+                    <td>TR</td>
+                </tr>
+        <?php
+        for ($i=0; $i<3; $i++){ 
+            ?>
+                
+                <tr>
+                    <td> <?= $i+1 ?> </td>
+                    <td><?= getUsuarioFromID($conn, $cl[$i][9]) ?> </td>
+                    <td><?= $cl[$i][0] ?> </td>
+                    <td><?= $cl[$i][1] ?> </td>
+                    <td><?= $cl[$i][2] ?> </td>
+                    <td><?= $cl[$i][3] ?> </td>
+                    <td><?= $cl[$i][4] ?> </td>
+                    <td><?= $cl[$i][5] ?> </td>
+                    <td><?= $cl[$i][6] ?> </td>
+                    <td><?= $cl[$i][7] ?> </td>
+                    <td><?= $cl[$i][8] ?> </td>
+                </tr>
+            <?php
+        }
+        echo "</table>";
+    }else{
+        return "";
+    }
+}

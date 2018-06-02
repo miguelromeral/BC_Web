@@ -72,6 +72,7 @@ if(@$_SESSION['nueva_edicion'] == true){
 }
 
 
+printClasificacion($conn, $ed);
 
 ?>
         <p>
@@ -142,6 +143,12 @@ if(@$_SESSION['nueva_edicion'] == true){
     <p>
         <?php getTablaPartidosEdicion($conn, $ed); ?>
     </p>
+    
+    <p>
+        <?php  ?>
+    </p>
+    
+    
     
     
     
