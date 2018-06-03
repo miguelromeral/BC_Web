@@ -11,17 +11,20 @@
 <?php
 include 'FuncionesPHP/funciones.php';
 include 'FuncionesPHP/consultas.php';
+include 'FuncionesPHP/queries_stats.php';
 $conn = conectarse();
 
 $ne = getNumeroEdiciones($conn);
 listaEdiciones($conn);
 ?>
-        <h2>Partidos por Edición</h2>
+        <h1>Partidos por Edición</h1>
         <?php listaTodosPartidos($conn); ?>
-        <h2>Clasificación por Edición</h2>
+        <h1>Clasificación por Edición</h1>
         <?php listaTodasClasificaciones($conn); ?>
-        <h2>Estadísticas Jugador</h2>
+        <h1>Estadísticas Jugador</h1>
         <?php for($i = 1; $i < 4; $i++){ estadisticasJugador($conn, $i); }?>
+        <h1>Estadísticas Equipo</h1>
+        <?php estadisticasEquiposTotal($conn); ?>
 
        
 </center></body>

@@ -247,14 +247,14 @@ function estadisticasJugador($conn, $jugador){
     $pj = getPJUsuario($conn, $jugador);
     $ta = getTAUsuario($conn, $jugador);
     $tr = getTRUsuario($conn, $jugador); 
-    $pg = 0;
-    $pe = 0;
-    $pp = 0;
-    $gf = 0;
-    $gc = 0;
+    $pg = getPGUsuario($conn, $jugador);
+    $pe = getPEUsuario($conn, $jugador);
+    $pp = getPPUsuario($conn, $jugador);
+    $gf = getGFUsuario($conn, $jugador);
+    $gc = getGCUsuario($conn, $jugador);;
     $pts = $pg * 3 + $pe;
     $dg = $gf - $gc;
-    $tpg = 0;
+    $tpg = getPENGUsuario($conn, $jugador);
     
     ?>
 <hr>
@@ -264,6 +264,11 @@ function estadisticasJugador($conn, $jugador){
     <tr>
         <td>Campeonatos</td>
         <td><?= getCampeonatosUsuario($conn, $jugador) ?></td>
+    </tr>
+    <tr>
+        <td>Último título</td>
+        <td><?php $fec = getUltimaUsuario($conn, $jugador);
+        if($fec) { echo date("d/m/Y", strtotime($fec)); } else { echo "Sin títulos"; }?></td>
     </tr>
     <tr>
         <td>PTS Totales</td>
@@ -287,15 +292,15 @@ function estadisticasJugador($conn, $jugador){
     </tr>
     <tr>
         <td>1º FG</td>
-        <td><?= "TBA" ?></td>
+        <td><?= getPrimeroFGUsuario($conn, $jugador) ?></td>
     </tr>
     <tr>
         <td>Prórrogas</td>
-        <td><?= "TBA" ?></td>
+        <td><?= getPRUsuario($conn, $jugador) ?></td>
     </tr>
     <tr>
         <td>Finales</td>
-        <td><?= "TBA" ?></td>
+        <td><?= getFinalesUsuario($conn, $jugador) ?></td>
     </tr>
     <tr>
         <td>TA</td>
@@ -327,7 +332,7 @@ function estadisticasJugador($conn, $jugador){
     </tr>
     <tr>
         <td>%Victorias</td>
-        <td><?= "TBA" ?></td>
+        <td><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj)); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
         <td>T.P Ganadas</td>
@@ -343,4 +348,120 @@ function estadisticasJugador($conn, $jugador){
         
 
     <?php
+}
+
+function estadisticasEquipo($conn, $equipo){
+    $pj = getPJEquipo($conn, $equipo);
+    $ta = getTAEquipo($conn, $equipo);
+    $tr = getTREquipo($conn, $equipo); 
+    $pg = getPGEquipo($conn, $equipo);
+    $pe = getPEEquipo($conn, $equipo);
+    $pp = getPPEquipo($conn, $equipo);
+    $gf = getGFEquipo($conn, $equipo);
+    $gc = getGCEquipo($conn, $equipo);
+    $pts = $pg * 3 + $pe;
+    $dg = $gf - $gc;
+    $tpg = getPENGEquipo($conn, $equipo);
+    
+    ?>
+<hr>
+        <?php getImagenEquipoID($conn, $equipo, 0.5); ?>
+<h1><?= getNombreEquipo($conn, $equipo) ?></h1>
+<table border="1">
+    <tr>
+        <td>Campeonatos</td>
+        <td><?= getCampeonatosEquipo($conn, $equipo) ?></td>
+    </tr>
+    <tr>
+        <td>Último título</td>
+        <td><?php $fec = getUltimaEquipo($conn, $equipo);
+        if($fec) { echo date("d/m/Y", strtotime($fec)); } else { echo "Sin títulos"; }?></td>
+    </tr>
+    <tr>
+        <td>PTS Totales</td>
+        <td><?= $pts ?></td>
+    </tr>
+    <tr>
+        <td>PJ</td>
+        <td><?= $pj ?></td>
+    </tr>
+    <tr>
+        <td>PG</td>
+        <td><?= $pg ?></td>
+    </tr>
+    <tr>
+        <td>PE</td>
+        <td><?= $pe ?></td>
+    </tr>
+    <tr>
+        <td>PP</td>
+        <td><?= $pp ?></td>
+    </tr>
+    <tr>
+        <td>1º FG</td>
+        <td><?= getPrimeroFGEquipo($conn, $equipo) ?></td>
+    </tr>
+    <tr>
+        <td>Prórrogas</td>
+        <td><?= getPREquipo($conn, $equipo) ?></td>
+    </tr>
+    <tr>
+        <td>Finales</td>
+        <td><?= getFinalesEquipo($conn, $equipo) ?></td>
+    </tr>
+    <tr>
+        <td>TA</td>
+        <td><?= $ta ?></td>
+    </tr>
+    <tr>
+        <td>TR</td>
+        <td><?= $tr ?></td>
+    </tr>
+    <tr>
+        <td>T/P</td>
+        <td><?php if ($pj > 0) { printf("%.2f", (($ta + $tr) / $pj)); } else { echo "NaN"; } ?></td>
+    </tr>
+    <tr>
+        <td>GF</td>
+        <td><?= $gf ?></td>
+    </tr>
+    <tr>
+        <td>GC</td>
+        <td><?= $gc ?></td>
+    </tr>
+    <tr>
+        <td>DG</td>
+        <td><?= $dg ?></td>
+    </tr>
+    <tr>
+        <td>G/P</td>
+        <td><?php if ($pj > 0) { printf("%.2f", ($gf / $pj)); } else { echo "NaN"; } ?></td>
+    </tr>
+    <tr>
+        <td>%Victorias</td>
+        <td><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj)); } else { echo "NaN"; } ?></td>
+    </tr>
+    <tr>
+        <td>T.P Ganadas</td>
+        <td><?php echo $tpg." / ".getTPEquipo($conn, $equipo) ?></td>
+    </tr>
+    <tr>
+        <td>Equipos</td>
+        <td><?= getNumeroEquiposEquipo($conn, $equipo) ?></td>
+    </tr>
+</table>
+
+
+        
+
+    <?php
+}
+
+
+function estadisticasEquiposTotal($conn){
+    $query = "select id,nombre from equipo order by nombre asc;";
+    $result = mysqli_query($conn, $query);
+    while($row = mysqli_fetch_assoc($result)){
+        estadisticasEquipo($conn, $row["id"]);
+    }
 }
