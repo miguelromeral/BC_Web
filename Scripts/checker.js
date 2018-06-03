@@ -109,3 +109,8 @@ function limpiarGanp(){
       ele[i].checked = false;
      return true;
 }
+
+function cambiar_clas_ed(){
+    var x = document.getElementByID("clas_edicion")[0].value;
+    alert("You selected: " + x);
+}

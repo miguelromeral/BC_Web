@@ -56,8 +56,6 @@ if($_POST){
     </head>
     <body>
         
-        <div>Prueba F1</div>
-        
     <form name="fsalir" action="index.php" method="get">
         <button type="submit" name="salir" id="salir" value="true">CERRAR SESIÓN</button>
     </form>
@@ -74,14 +72,15 @@ $ej = $_SESSION['Javi'];
 $ec = $_SESSION['Chechu'];
 
 if(@$_SESSION['nueva_edicion'] == true){
-   registrarEdicion($conn, $_SESSION['edicion']);
+   registrarEdicion($conn, $_SESSION['edicion'], $em, $ej, $ec);
    $_SESSION['nueva_edicion'] = false;
 }
 
-
+echo "<p>";
 printClasificacion($conn, $ed);
+echo "</p>";
 
-$cl = getClasificacion($conn, $ed);
+//$cl = getClasificacion($conn, $ed);
 
 //$_SESSION['primero'] = getEquipoFromUsuarioSesion($sesion, $cl[0][9]);
 //$_SESSION['segundo'] = getEquipoFromUsuarioSesion($sesion, $cl[1][9]);
@@ -106,23 +105,17 @@ $cl = getClasificacion($conn, $ed);
                 <td>
                     <?php getImagenEquipoNombre($conn, $em, 50, 50); ?>
                 </td>
-                <td>
-                    <b><?=$em?></b>
-                </td>
+                <td id="principal_equipo"><?=$em?></td>
                 
                 <td>
                     <?php getImagenEquipoNombre($conn, $ej, 50, 50); ?>
                 </td>
                 
-                <td>
-                    <b><?=$ej?></b>
-                </td>
+                <td id="principal_equipo"><?=$ej?></td>
                 <td>
                     <?php getImagenEquipoNombre($conn, $ec, 50, 50); ?>
                 </td>
-                <td>
-                    <b><?=$ec?></b>
-                </td>
+                <td id="principal_equipo"><?=$ec?></td>
             </tr>
         
 

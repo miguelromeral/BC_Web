@@ -17,7 +17,7 @@ if(@$_GET['salir']=="true")
          <script src="Scripts/checker.js"></script> 
          <link rel="stylesheet" type="text/css" href="Estilos/estilos.css">
     </head>
-    <body>
+    <body><center>
 <?php
    if(@$_SESSION['en_curso'] == true){
 ?>
@@ -99,7 +99,13 @@ listaEquipos("Chechu");
             Imagen (305x305): <input type="file" name="imagen_equipo_nuevo"/>
          <input type="submit" value="Registrar">
       </form>
+         
+         <p>
+      <form action="estadisticas.php" method="get">
+            <button type="submit">VER ESTADÍSTICAS</button>
+        </form>
+    </p>
        
    <?php } ?>
-    </body>
+</center></body>
 </html>

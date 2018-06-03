@@ -93,12 +93,12 @@ function registrarPartido($conn, $ed, $tipo, $ul, $uv, $el, $ev, $gl, $gv, $tal,
             . "($idp, $ed, '$tipo', $num_ed, $pr, $pen, $ganp);";
     guardarEnLog($queryInsert);
     mysqli_query($conn, $queryInsert);
-    $queryInsert = "INSERT INTO marcador (partido, equipo, usuario, local, goles, ta, tr) VALUES "
-            . "($idp, $el, $ul, 1, $gl, $tal, $trl);";
+    $queryInsert = "INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES "
+            . "($idp, $ed, $el, $ul, 1, $gl, $tal, $trl);";
     guardarEnLog($queryInsert);
     mysqli_query($conn, $queryInsert); 
-    $queryInsert = "INSERT INTO marcador (partido, equipo, usuario, local, goles, ta, tr) VALUES "
-            . "($idp, $ev, $uv, 0, $gv, $tav, $trv);";
+    $queryInsert = "INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES "
+            . "($idp, $ed, $ev, $uv, 0, $gv, $tav, $trv);";
     guardarEnLog($queryInsert);
     mysqli_query($conn, $queryInsert);
     
@@ -121,11 +121,20 @@ function registrarUsuarios($conn){
     return true;
 }
 
-function registrarEdicion($conn, $edicion){
+function registrarEdicion($conn, $edicion, $em, $ej, $ec){
     $fecha = date("Y-m-d");
     $hora = date("H");
     $mins = date("i");
     $queryInsert = "INSERT INTO edicion (id, fecha, hora, mins) VALUES ($edicion, '$fecha', $hora, $mins);";
+    guardarEnLog($queryInsert);
+    mysqli_query($conn, $queryInsert);
+    $queryInsert = "INSERT INTO eleccion (edicion, usuario, equipo) VALUES ($edicion, 1, ". getIDEquipo($conn, $em).");";
+    guardarEnLog($queryInsert);
+    mysqli_query($conn, $queryInsert);
+    $queryInsert = "INSERT INTO eleccion (edicion, usuario, equipo) VALUES ($edicion, 2, ". getIDEquipo($conn, $ej).");";
+    guardarEnLog($queryInsert);
+    mysqli_query($conn, $queryInsert);
+    $queryInsert = "INSERT INTO eleccion (edicion, usuario, equipo) VALUES ($edicion, 3, ". getIDEquipo($conn, $ec).");";
     guardarEnLog($queryInsert);
     mysqli_query($conn, $queryInsert);
     return true;
@@ -175,6 +184,7 @@ function crearEsquema($conn){
     $query = "Create table bc.marcador
 (
 	partido Integer NOT NULL,		-- # Partido
+        edicion Integer NOT NULL,
 	equipo Integer NOT NULL,		-- Equipo que lo juega
 	usuario Integer NOT NULL,		-- Usuario que lo juega
 	local Boolean NOT NULL,			-- Indica si es local
@@ -193,4 +203,46 @@ function crearEsquema($conn){
  primary key (id)
 );";
     $result = mysqli_query($conn, $query);
+    $query = "Create table bc.eleccion
+(
+	edicion Integer Not null,
+	usuario Integer Not null,
+	equipo Integer Not null,
+	PRIMARY KEY(edicion, usuario, equipo)
+);";
+    $result = mysqli_query($conn, $query);
+}
+
+function listaEdiciones ($conn){
+    $ned = getNumeroEdiciones($conn);
+    echo "<p>Clasificación por ediciones:<br>";
+    echo "<select name=\"clas_edicion\" id=\"clas_edicion\" onchange=\"cambiar_clas_ed()\">";
+    echo "<option value=\"null\">Seleccione una edición</option>";
+    for ($i=1; $i <= $ned; $i++){
+        echo "<option value=\"".$i."\">".$i."ª</option>";
+    }
+    echo "</select>";
+    echo "</p>";
+}
+
+function listaTodosPartidos ($conn){
+    $ned = getNumeroEdiciones($conn);
+    echo "<p>Partidos por edición:<br>";
+    for ($i=1; $i <= $ned; $i++){
+        echo "Edición ".$i."ª<br>";
+        getTablaPartidosEdicion($conn, $i);
+    }
+    echo "</p>";
+}
+
+function listaTodasClasificaciones($conn){
+    $ned = getNumeroEdiciones($conn);
+    for ($i = 1; $i <= $ned; $i++){
+        echo "Edición ".$i."ª<br>";
+        printClasificacion($conn, $i);
+    }
+}
+
+function estadisticasJugador($conn, $jugador){
+    
 }

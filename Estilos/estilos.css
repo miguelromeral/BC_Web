@@ -7,9 +7,39 @@
     font-family: F1_Bold;
     src: url(Fuentes/F1_Bold.ttf);
 }
+@font-face {
+    font-family: F1_Reg;
+    src: url(Fuentes/F1_Reg.ttf);
+}
+@font-face {
+    font-family: F1_Wide;
+    src: url(Fuentes/F1_Wide.ttf);
+}
+@font-face {
+    font-family: UCL;
+    src: url(Fuentes/Champions.ttf);
+}
 
 div {
     font-family: F1_Bold;
+}
+
+p {
+    text-align: center;
+}
+
+/* Cumple con todos los que tienen id=... */
+#marcador_g {
+    font-family: UCL;
+    font-size: 200%;
+    text-align: center;
+    color: red;
+}
+
+#principal_equipo{
+    font-family: UCL;
+    font-size: 150%;
+    color: darkblue;
 }
 
 body {
@@ -17,4 +47,65 @@ body {
   background: -webkit-linear-gradient(#648880, #293f50);
   background:    -moz-linear-gradient(#648880, #293f50); */
   background:         linear-gradient(#f2f2f2,  #cccccc);
+}
+
+
+#tabla_partidos {
+    border-collapse: collapse;
+    font-family: F1_Reg;
+    font-size: 100%;
+    width: 100%;
+}
+
+#p_td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+#p_tr:hover {background-color:#f5f5f5;}
+
+
+#tabla_partidos {
+    border-collapse: collapse;
+    font-family: F1_Reg;
+    font-size: 100%;
+    width: 100%;
+}
+
+#p_td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+#p_tr:hover {background-color:#f5f5f5;}
+
+
+/* tabla clasificación */
+
+#tabla_clasificacion {
+    border-collapse: collapse;
+    font-family: F1_Reg;
+    font-size: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+#c_td_pts{
+    font-family: F1_Bold;
+    font-size: 130%;
+}
+#c_tr_head{
+    background-color: #0a001a;
+    color: white;
+}
+#c_tr_in{
+    background-color: #33cc33;
+}
+#c_tr_out{
+    background-color: #ff3333;
+    color: white;
 }

@@ -85,7 +85,7 @@ function getImagenUsuario($id, $pc = 1){
 
 function getTablaPartidosEdicion($conn, $edicion){
     if ($conn){
-        echo "<table>";
+        echo "<table id=\"tabla_partidos\">";
         $query = "SELECT * FROM partido where edicion = $edicion;";
         $result = mysqli_query($conn, $query);
         // IDP, Tipo, #Num_ED, el, gl, gv, ev, PR, PEN, Ganador, Penaltis
@@ -103,42 +103,46 @@ function getTablaPartidosEdicion($conn, $edicion){
         echo "<td>Prórroga</td>";
         echo "<td>Penaltis</td>";
         echo "<td>Ganador (Penaltis)</td></tr>";*/
-        echo "<tr><i>Partidos de la edición</i></tr>";
         while($row = mysqli_fetch_assoc($result))
         {
-            echo "<tr>";
-            echo "<td>".$row["id"]."</td>";
-            echo "<td>".$row["tipo"]."</td>";
-            echo "<td>".$row["num_ed"]."</td>";
+            
+            
+            echo "<tr id=\"p_tr\">";
+            echo "<td id=\"p_td\">".$row["id"]."</td>";
+            echo "<td id=\"p_td\">".$row["tipo"]."</td>";
+            echo "<td id=\"p_td\">".$row["num_ed"]."</td>";
             
             
             $query2 = "SELECT * FROM marcador where partido = ".$row["id"]." and local = 1;";
             $result2 = mysqli_query($conn, $query2);
             $fila = mysqli_fetch_assoc($result2);
             
-            echo "<td>";
+            echo "<td id=\"p_td\">";
             getImagenUsuario($fila["usuario"], 0.25);
             echo "</td>";
-            echo "<td>";
+            echo "<td id=\"p_td\">";
             getImagenEquipoID($conn, 50, 50, $fila["equipo"]);
             echo "</td>";
-            echo "<td>". getNombreEquipo($conn, $fila["equipo"]) ."</td>";
-            echo "<td>".$fila["goles"]."</td>";
+            echo "<td id=\"p_td\">". getNombreEquipo($conn, $fila["equipo"]) ."</td>";
+            echo "<td id=\"marcador_g\">".$fila["goles"]."</td>";
             
             $query3 = "SELECT * FROM marcador where partido = ".$row["id"]." and local = 0;";
             $result3 = mysqli_query($conn, $query3);
             $fila2 = mysqli_fetch_assoc($result3);
-            echo "<td>".$fila2["goles"]."</td>";
-            echo "<td>". getNombreEquipo($conn, $fila2["equipo"]) ."</td>";
-            echo "<td>";
+            echo "<td id=\"p_td\">-</td>";
+            echo "<td id=\"marcador_g\">".$fila2["goles"]."</td>";
+            echo "<td id=\"p_td\">". getNombreEquipo($conn, $fila2["equipo"]) ."</td>";
+            echo "<td id=\"p_td\">";
             getImagenEquipoID($conn, 50, 50, $fila2["equipo"]);
             echo "</td>";
-            echo "<td>";
+            echo "<td id=\"p_td\">";
             getImagenUsuario($fila2["usuario"], 0.25);
             echo "</td>";
             if ($row["prorroga"]) { echo "<td>PR</td>"; }
             if ($row["penaltis"]) {
-                echo "<td>Ganó en penaltis: ".getNombreEquipo($conn, $row["ganador_penaltis"])."</td>";
+                echo "<td id=\"p_td\">Ganó en penaltis: ";
+                getImagenEquipoID($conn, 50, 50, $row["ganador_penaltis"]); 
+                echo "</td>";
             }
             echo "</tr>";
         } 
@@ -246,7 +250,7 @@ function ordenarClasificacion($cl){
 }
 
 function getClasificacion($conn, $edicion){
-    // PTS[0], V[1], E[2], D[3], GF[4], GC[5], DG[6], TA[7], TR[8], Usuario[9], PJ[10]
+    // PTS[0], V[1], E[2], D[3], GF[4], GC[5], DG[6], TA[7], TR[8], Usuario[9], PJ[10], Equipo[11]
     //$m = [0,0,0,0,0,0,0,1];
     $m = array_fill(0, 10, 0);
     $m[9] = 1;
@@ -254,9 +258,9 @@ function getClasificacion($conn, $edicion){
     $j[9] = 2;
     $c = array_fill(0, 10, 0);
     $c[9] = 3;
-    array_push($m, 1);
-    array_push($j, 2);
-    array_push($c, 3);
+    array_push($m, 1, getEquipoPorUsuarioEdicion($conn, 1, $edicion));
+    array_push($j, 2, getEquipoPorUsuarioEdicion($conn, 2, $edicion));
+    array_push($c, 3, getEquipoPorUsuarioEdicion($conn, 3, $edicion));
     $jug = [$m, $j, $c];
     $query = "SELECT id FROM partido WHERE edicion = $edicion and tipo = 'Fase de Grupos';";
     $result = mysqli_query($conn, $query);
@@ -285,10 +289,11 @@ function printClasificacion($conn, $edicion){
     if($conn){
         $cl = getClasificacion($conn, $edicion);
         ?>
-            <table border="1">
-                <tr>
-                    <td>POS</td>
+            <table border="1" id="tabla_clasificacion">
+                <tr id="c_tr_head">
+                    <td>POS.</td>
                     <td>Usuario</td>
+                    <td>Equipo</td>
                     <td>PTS</td>
                     <td>PJ</td>
                     <td>V</td>
@@ -302,12 +307,17 @@ function printClasificacion($conn, $edicion){
                 </tr>
         <?php
         for ($i=0; $i<3; $i++){ 
+            if ($i < 2){
+                echo "<tr id=\"c_tr_in\">";
+            }else{
+                echo "<tr id=\"c_tr_out\">";
+            }
+            
             ?>
-                
-                <tr>
-                    <td> <?= $i+1 ?> </td>
+                    <td> <?= $i+1 ?>º </td>
                     <td><?= getUsuarioFromID($conn, $cl[$i][9]) ?> </td>
-                    <td><?= $cl[$i][0] ?> </td>
+                    <td><?= $cl[$i][11]?> </td>
+                    <td id="c_td_pts"><?= $cl[$i][0] ?> </td>
                     <td><?= $cl[$i][10] ?> </td>
                     <td><?= $cl[$i][1] ?> </td>
                     <td><?= $cl[$i][2] ?> </td>
@@ -324,4 +334,10 @@ function printClasificacion($conn, $edicion){
     }else{
         return "";
     }
+}
+
+function getEquipoPorUsuarioEdicion($conn, $usuario, $edicion){
+    $query = "select nombre from bc.equipo as e inner join ( select equipo from bc.eleccion where edicion = $edicion and usuario = $usuario ) as n on n.equipo = e.id;";
+    $result = mysqli_query($conn, $query);
+    return mysqli_fetch_assoc($result)["nombre"];
 }
