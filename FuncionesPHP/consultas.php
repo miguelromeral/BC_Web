@@ -341,3 +341,122 @@ function getEquipoPorUsuarioEdicion($conn, $usuario, $edicion){
     $result = mysqli_query($conn, $query);
     return mysqli_fetch_assoc($result)["nombre"];
 }
+
+
+function getCampeonatosUsuario($conn, $usuario){
+    $query = "select count(a.partido) as BC_ganadas, a.nombre
+from (
+	select m.goles, m.partido, m.equipo, u.nombre, u.id
+    from usuario as u
+    inner join (
+    	select m.usuario, m.goles, m.partido, m.equipo
+        from marcador as m
+        inner join Partido as p
+        on m.partido = p.id
+        where p.tipo = 'Final'
+    ) as m
+    on m.usuario = u.id
+    where m.usuario = $usuario
+) as a
+inner join(
+    select max(n2.goles) as max_goles, min(n2.goles) as min_goles, n1.partido, n2.ganador_penaltis
+    from (
+        select m.partido, e.id
+        from equipo as e
+        inner join Marcador as m
+        on e.id = m.equipo
+    ) as n1
+    inner join
+    (
+        select m.goles, m.equipo, p.id as partido, p.ganador_penaltis
+        from partido as p
+        inner join Marcador as m
+        on m.partido = p.id
+    ) as n2
+    on n1.partido = n2.partido
+    group by n1.partido, n2.ganador_penaltis
+    order by n1.partido
+) as b
+on a.partido = b.partido
+where a.goles = b.max_goles and a.goles > b.min_goles or a.equipo = b.ganador_penaltis
+group by a.nombre
+order by BC_ganadas desc;";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["BC_ganadas"];
+}
+
+function getPJUsuario($conn, $usuario){
+    $nombre = getUsuarioFromID($conn, $usuario);
+    $query = "select count(m.partido) as cuenta
+from usuario as u
+inner join marcador as m
+on u.id = m.usuario
+where u.nombre = '".$nombre."';";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["cuenta"];
+}
+
+function getNumeroEquiposUsuario($conn, $usuario){
+    $nombre = getUsuarioFromID($conn, $usuario);
+    $query = "select count(e.nombre) as cuenta
+from equipo as e
+inner join (
+	select distinct m.equipo
+    from marcador as m
+    inner join usuario as u
+    on m.usuario = u.id
+    where u.nombre = '".$nombre."'
+
+) as n
+on e.id = n.equipo;";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["cuenta"];
+}
+
+function getTAUsuario($conn, $usuario){
+    $nombre = getUsuarioFromID($conn, $usuario);
+    $query = "select sum(m.ta) as ta
+from Marcador as m
+inner join Usuario as u
+on m.usuario = u.id
+where u.nombre = '".$nombre."'";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["ta"];
+}
+
+function getTRUsuario($conn, $usuario){
+    $nombre = getUsuarioFromID($conn, $usuario);
+    $query = "select sum(m.tr) as tr
+from Marcador as m
+inner join Usuario as u
+on m.usuario = u.id
+where u.nombre = '".$nombre."'";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["tr"];
+}
+
+function getTPUsuario($conn, $usuario){
+    $nombre = getUsuarioFromID($conn, $usuario);
+    $query = "select count(m.partido) as tandas
+from Usuario as u
+inner join 
+(
+	select m.partido, m.usuario
+    from Partido as p
+    inner join Marcador as m
+    on p.id = m.partido
+    where p.penaltis
+) as m
+on u.id = m.usuario
+where u.nombre = '".$nombre."'";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["tandas"];
+}
+
+

@@ -244,5 +244,103 @@ function listaTodasClasificaciones($conn){
 }
 
 function estadisticasJugador($conn, $jugador){
+    $pj = getPJUsuario($conn, $jugador);
+    $ta = getTAUsuario($conn, $jugador);
+    $tr = getTRUsuario($conn, $jugador); 
+    $pg = 0;
+    $pe = 0;
+    $pp = 0;
+    $gf = 0;
+    $gc = 0;
+    $pts = $pg * 3 + $pe;
+    $dg = $gf - $gc;
+    $tpg = 0;
     
+    ?>
+<hr>
+        <?php getImagenUsuario($jugador, 1.5); ?>
+<h1><?= getUsuarioFromID($conn, $jugador) ?></h1>
+<table border="1">
+    <tr>
+        <td>Campeonatos</td>
+        <td><?= getCampeonatosUsuario($conn, $jugador) ?></td>
+    </tr>
+    <tr>
+        <td>PTS Totales</td>
+        <td><?= $pts ?></td>
+    </tr>
+    <tr>
+        <td>PJ</td>
+        <td><?= $pj ?></td>
+    </tr>
+    <tr>
+        <td>PG</td>
+        <td><?= $pg ?></td>
+    </tr>
+    <tr>
+        <td>PE</td>
+        <td><?= $pe ?></td>
+    </tr>
+    <tr>
+        <td>PP</td>
+        <td><?= $pp ?></td>
+    </tr>
+    <tr>
+        <td>1º FG</td>
+        <td><?= "TBA" ?></td>
+    </tr>
+    <tr>
+        <td>Prórrogas</td>
+        <td><?= "TBA" ?></td>
+    </tr>
+    <tr>
+        <td>Finales</td>
+        <td><?= "TBA" ?></td>
+    </tr>
+    <tr>
+        <td>TA</td>
+        <td><?= $ta ?></td>
+    </tr>
+    <tr>
+        <td>TR</td>
+        <td><?= $tr ?></td>
+    </tr>
+    <tr>
+        <td>T/P</td>
+        <td><?php if ($pj > 0) { printf("%.2f", (($ta + $tr) / $pj)); } else { echo "NaN"; } ?></td>
+    </tr>
+    <tr>
+        <td>GF</td>
+        <td><?= $gf ?></td>
+    </tr>
+    <tr>
+        <td>GC</td>
+        <td><?= $gc ?></td>
+    </tr>
+    <tr>
+        <td>DG</td>
+        <td><?= $dg ?></td>
+    </tr>
+    <tr>
+        <td>G/P</td>
+        <td><?php if ($pj > 0) { printf("%.2f", ($gf / $pj)); } else { echo "NaN"; } ?></td>
+    </tr>
+    <tr>
+        <td>%Victorias</td>
+        <td><?= "TBA" ?></td>
+    </tr>
+    <tr>
+        <td>T.P Ganadas</td>
+        <td><?php echo $tpg." / ".getTPUsuario($conn, $jugador) ?></td>
+    </tr>
+    <tr>
+        <td>Equipos</td>
+        <td><?= getNumeroEquiposUsuario($conn, $jugador) ?></td>
+    </tr>
+</table>
+
+
+        
+
+    <?php
 }
