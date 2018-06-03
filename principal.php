@@ -55,6 +55,11 @@ if($_POST){
          <script src="Scripts/checker.js"></script> 
     </head>
     <body>
+        
+    <form name="fsalir" action="index.php" method="get">
+        <button type="submit" name="salir" id="salir" value="true">CERRAR SESIÓN</button>
+    </form>
+        
 <?php
 
 //Quitamos Warning
@@ -73,6 +78,12 @@ if(@$_SESSION['nueva_edicion'] == true){
 
 
 printClasificacion($conn, $ed);
+
+$cl = getClasificacion($conn, $ed);
+
+//$_SESSION['primero'] = getEquipoFromUsuarioSesion($sesion, $cl[0][9]);
+//$_SESSION['segundo'] = getEquipoFromUsuarioSesion($sesion, $cl[1][9]);
+
 
 ?>
         <p>

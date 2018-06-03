@@ -1,5 +1,15 @@
 <!DOCTYPE html>
-<?php session_start(); ?>
+<?php 
+
+session_start();
+
+if(@$_GET['salir']=="true")
+{
+    $_SESSION['en_curso'] == false;
+}
+
+
+?>
 <html>
     <head>
         <meta charset="ISO-8859-1">
@@ -18,6 +28,8 @@
       </p>
 <?php 
    }else{
+       
+
 
 
 

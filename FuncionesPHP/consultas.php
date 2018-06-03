@@ -2,7 +2,7 @@
 
 function getNumeroEdiciones($conn){
     if ($conn){
-        $query = "SELECT count(*) as cuenta FROM edicion;";
+        $query = "SELECT count(*) as cuenta FROM bc.edicion;";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
         return $row["cuenta"];
@@ -57,7 +57,7 @@ function getTablaEquiposRegistrados($conn){
         {
             echo "<tr><td>";
             echo $row["id"];
-            echo "<tr><td>";
+            echo "</td><td>";
             getImagenEquipoID($conn, 40, 40, $row["id"]);
             echo "</td><td>";
             echo $row["nombre"];
@@ -70,6 +70,19 @@ function getTablaEquiposRegistrados($conn){
     }
 }
 
+function getImagenUsuario($id, $pc = 1){
+    $w = 175 * $pc;
+    $h = 253 * $pc;
+    $nombre = "silueta";
+    switch($id){
+        case 1: $nombre = "Miguel"; break;
+        case 2: $nombre = "Javi"; break;
+        case 3: $nombre = "Chechu"; break;
+        default: $nombre = "silueta";
+    }
+    echo "<img src=\"Imagenes/foto_$nombre.png\" width=\"$w\" height=\"$h\"/>";
+}
+
 function getTablaPartidosEdicion($conn, $edicion){
     if ($conn){
         echo "<table>";
@@ -77,7 +90,7 @@ function getTablaPartidosEdicion($conn, $edicion){
         $result = mysqli_query($conn, $query);
         // IDP, Tipo, #Num_ED, el, gl, gv, ev, PR, PEN, Ganador, Penaltis
         //id, tipo, num_ed, - , prorroga, penaltis, ganador_penaltis
-        echo "<tr>";
+        /*echo "<tr>";
         echo "<td>#Partido</td>";
         echo "<td>Tipo</td>";
         echo "<td>#Partido Ed.</td>";
@@ -89,7 +102,8 @@ function getTablaPartidosEdicion($conn, $edicion){
         echo "<td>Visitante (S)</td>";
         echo "<td>Prórroga</td>";
         echo "<td>Penaltis</td>";
-        echo "<td>Ganador (Penaltis)</td></tr>";
+        echo "<td>Ganador (Penaltis)</td></tr>";*/
+        echo "<tr><i>Partidos de la edición</i></tr>";
         while($row = mysqli_fetch_assoc($result))
         {
             echo "<tr>";
@@ -101,6 +115,10 @@ function getTablaPartidosEdicion($conn, $edicion){
             $query2 = "SELECT * FROM marcador where partido = ".$row["id"]." and local = 1;";
             $result2 = mysqli_query($conn, $query2);
             $fila = mysqli_fetch_assoc($result2);
+            
+            echo "<td>";
+            getImagenUsuario($fila["usuario"], 0.25);
+            echo "</td>";
             echo "<td>";
             getImagenEquipoID($conn, 50, 50, $fila["equipo"]);
             echo "</td>";
@@ -114,6 +132,9 @@ function getTablaPartidosEdicion($conn, $edicion){
             echo "<td>". getNombreEquipo($conn, $fila2["equipo"]) ."</td>";
             echo "<td>";
             getImagenEquipoID($conn, 50, 50, $fila2["equipo"]);
+            echo "</td>";
+            echo "<td>";
+            getImagenUsuario($fila2["usuario"], 0.25);
             echo "</td>";
             if ($row["prorroga"]) { echo "<td>Sí</td>"; }
             if ($row["penaltis"]) {
@@ -226,13 +247,13 @@ function ordenarClasificacion($cl){
 }
 
 function getClasificacion($conn, $edicion){
-    // PTS[0], V[1], E[2], D[3], GF[4], GC[5], DG[6], TA[7], TR[8]
+    // PTS[0], V[1], E[2], D[3], GF[4], GC[5], DG[6], TA[7], TR[8], Usuario[9], PJ[10]
     //$m = [0,0,0,0,0,0,0,1];
-    $m = array_fill(0, 9, 0);
+    $m = array_fill(0, 10, 0);
     $m[9] = 1;
-    $j = array_fill(0, 9, 0);
+    $j = array_fill(0, 10, 0);
     $j[9] = 2;
-    $c = array_fill(0, 9, 0);
+    $c = array_fill(0, 10, 0);
     $c[9] = 3;
     array_push($m, 1);
     array_push($j, 2);
@@ -254,6 +275,9 @@ function getClasificacion($conn, $edicion){
             }
         }
     }
+    for ($i=0; $i<3; $i++){ 
+        $jug[$i][10] = $jug[$i][1] + $jug[$i][2] + $jug[$i][3];
+    }
     return ordenarClasificacion($jug);
     //return $jug;
 }
@@ -267,6 +291,7 @@ function printClasificacion($conn, $edicion){
                     <td>POS</td>
                     <td>Usuario</td>
                     <td>PTS</td>
+                    <td>PJ</td>
                     <td>V</td>
                     <td>E</td>
                     <td>D</td>
@@ -284,6 +309,7 @@ function printClasificacion($conn, $edicion){
                     <td> <?= $i+1 ?> </td>
                     <td><?= getUsuarioFromID($conn, $cl[$i][9]) ?> </td>
                     <td><?= $cl[$i][0] ?> </td>
+                    <td><?= $cl[$i][10] ?> </td>
                     <td><?= $cl[$i][1] ?> </td>
                     <td><?= $cl[$i][2] ?> </td>
                     <td><?= $cl[$i][3] ?> </td>
