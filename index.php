@@ -15,6 +15,7 @@ if(@$_GET['salir']=="true")
         <meta charset="ISO-8859-1">
         <title>Brother's Cup PHP</title>
          <script src="Scripts/checker.js"></script> 
+         <link rel="stylesheet" type="text/css" href="Estilos/estilos.css">
     </head>
     <body>
 <?php

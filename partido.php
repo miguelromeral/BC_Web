@@ -17,6 +17,7 @@ if($_POST){
         <title>Brother's Cup PHP</title>
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
         <script src="Scripts/checker.js"></script> 
+         <link rel="stylesheet" type="text/css" href="Estilos/estilos.css">
     </head>
     <body>
 <?php

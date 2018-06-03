@@ -136,10 +136,9 @@ function getTablaPartidosEdicion($conn, $edicion){
             echo "<td>";
             getImagenUsuario($fila2["usuario"], 0.25);
             echo "</td>";
-            if ($row["prorroga"]) { echo "<td>Sí</td>"; }
+            if ($row["prorroga"]) { echo "<td>PR</td>"; }
             if ($row["penaltis"]) {
-                echo "<td>Sí</td>";
-                echo "<td>".getNombreEquipo($conn, $row["ganador_penaltis"])."</td>";
+                echo "<td>Ganó en penaltis: ".getNombreEquipo($conn, $row["ganador_penaltis"])."</td>";
             }
             echo "</tr>";
         } 

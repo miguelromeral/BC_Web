@@ -38,7 +38,6 @@ if($_POST){
         $pen = 'false'; if ($_POST['pen']) $pen = 'true';
         $ganp = 0; if ($_POST['ganp']) $ganp = $_POST['ganp'];
         registrarPartido($conn, $ed, $tipo, $ul, $uv, $el, $ev, $gl, $gv, $tal, $tav, $trl, $trv, $pr, $pen, $ganp);
-        echo "<h1>PARTIDO REGISTRADO</h1>";
         $_SESSION['en_partido'] = false;
        }
        
@@ -52,9 +51,12 @@ if($_POST){
     <head>
         <meta charset="ISO-8859-1">
         <title>Brother's Cup PHP</title>
-         <script src="Scripts/checker.js"></script> 
+         <script src="Scripts/checker.js"></script>
+         <link rel="stylesheet" type="text/css" href="Estilos/estilos.css">
     </head>
     <body>
+        
+        <div>Prueba F1</div>
         
     <form name="fsalir" action="index.php" method="get">
         <button type="submit" name="salir" id="salir" value="true">CERRAR SESIÓN</button>
