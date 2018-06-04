@@ -110,7 +110,58 @@ function limpiarGanp(){
      return true;
 }
 
-function cambiar_clas_ed(){
-    var x = document.getElementByID("clas_edicion")[0].value;
-    alert("You selected: " + x);
+
+function ver_stats(obj){
+    var selectBox = obj;
+    var selected = selectBox.options[selectBox.selectedIndex].value;
+    var pan1 = document.getElementById("stats_partidos");
+    var pan2 = document.getElementById("stats_clasificaciones");
+    var pan3 = document.getElementById("stats_competicion");
+    var pan4 = document.getElementById("stats_jugadores");
+    var pan5 = document.getElementById("stats_equipos");
+
+    pan1.style.display = "none";
+    pan2.style.display = "none";
+    pan3.style.display = "none";
+    pan4.style.display = "none";
+    pan5.style.display = "none";
+
+    if(selected === 'partidos'){
+        pan1.style.display = "block";
+    }
+    else if(selected === 'clasificaciones'){
+        pan2.style.display = "block";
+    }
+    else if(selected === 'competicion'){
+        pan3.style.display = "block";
+    }
+    else if(selected === 'jugadores'){
+        pan4.style.display = "block";
+    }
+    else if(selected === 'equipos'){
+        pan5.style.display = "block";
+    }   
+}
+
+
+function ver_stats_clasificacion(obj, ned){
+    var selectBox = obj;
+    var selected = selectBox.options[selectBox.selectedIndex].value;
+    
+    var paneles = [];
+    
+    var i;
+    var base = "stats_clasificaciones_";
+    for (i = 1; i <= ned; i++) {
+        var nombre = base.concat(i);
+        var panel = document.getElementById(nombre);
+        panel.style.display = 'none';
+        paneles.push(panel);
+    }
+    
+    if(selected !== 'null'){
+        var ind = parseInt(selected) - 1;
+        paneles[ind].style.display = 'block';
+    }
+    
 }

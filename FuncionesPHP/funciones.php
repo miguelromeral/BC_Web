@@ -220,16 +220,18 @@ function crearEsquema($conn){
     $result = mysqli_query($conn, $query);
 }
 
-function listaEdiciones ($conn){
-    $ned = getNumeroEdiciones($conn);
-    echo "<p>Clasificación por ediciones:<br>";
-    echo "<select name=\"clas_edicion\" id=\"clas_edicion\" onchange=\"cambiar_clas_ed()\">";
-    echo "<option value=\"null\">Seleccione una edición</option>";
-    for ($i=1; $i <= $ned; $i++){
-        echo "<option value=\"".$i."\">".$i."ª</option>";
-    }
-    echo "</select>";
-    echo "</p>";
+function listaOpciones ($conn){
+    ?>
+    <select name="select_stats" onchange="ver_stats(this)">
+        <option value="null">SELECCIONE LAS ESTADÍSTICAS</option>
+        <option value="partidos">Partidos</option>
+        <option value="clasificaciones">Clasificaciones</option>
+        <option value="competicion">Competición</option>
+        <option value="jugadores">Jugadores</option>
+        <option value="equipos">Equipos</option>
+    </select>
+   
+    <?php
 }
 
 function listaTodosPartidos ($conn){
@@ -245,8 +247,12 @@ function listaTodosPartidos ($conn){
 function listaTodasClasificaciones($conn){
     $ned = getNumeroEdiciones($conn);
     for ($i = 1; $i <= $ned; $i++){
-        echo "Edición ".$i."ª<br>";
-        printClasificacion($conn, $i);
+        ?>
+            <div id="stats_clasificaciones_<?= $i ?>" style="display: none;">
+                Edición <?= $i ?>ª<br>
+                <?php printClasificacion($conn, $i); ?>
+            </div>
+        <?php
     }
 }
 
@@ -469,14 +475,14 @@ function estadisticasEquipo($conn, $equipo){
 function estadisticasEquiposTotal($conn){
     $query = "select id,nombre from equipo order by nombre asc;";
     $result = mysqli_query($conn, $query);
-    //while($row = mysqli_fetch_assoc($result)){
-        //$equipo = $row["id"];
-        $equipo = 3;
+    while($row = mysqli_fetch_assoc($result)){
+        $equipo = $row["id"];
+        //$equipo = 3;
         estadisticasEquipo($conn, $equipo);
         ?>
         <p><?php golesEquipoEdicionUsuario($conn, $equipo); ?></p>
         <?php
-    //}
+    }
 }
 
 function estadisticasCompeticion($conn){
