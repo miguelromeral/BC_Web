@@ -108,3 +108,20 @@ body {
 #c_tr_out{
     color: black;
 }
+
+#td_ucl_blue{
+    background-image:url(timer.png);
+    background-size: cover;
+    color: white;
+    font-family: UCL;
+    text-align: center;
+    font-size: 120%;
+}
+#td_ucl_white{
+    background-image:url(rotulo2.png);
+    background-size: cover;
+    color: darkblue;
+    font-family: UCL;
+    text-align: center;
+    font-size: 120%;
+}
