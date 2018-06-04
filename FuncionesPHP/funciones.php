@@ -270,8 +270,6 @@ function estadisticasJugador($conn, $jugador){
     $tpg = getPENGUsuario($conn, $jugador);
     
     ?>
-<hr>
-        <?php getImagenUsuario($jugador, 1.5); ?>
 <h1><?= getUsuarioFromID($conn, $jugador) ?></h1>
 <table>
     <tr>
@@ -360,12 +358,17 @@ function estadisticasJugador($conn, $jugador){
 }
 
 function estadisticasUsuario($conn, $usuario){
-    estadisticasJugador($conn, $usuario);
+    echo "<div id=\"stats_jugadores_$usuario\" style=\"display: none;\">";
+    //echo "<div id=\"stats_jugadores_$usuario\">";
+    
+    getImagenUsuario($usuario, 1.5);
     ?>
+        <p><?php estadisticasJugador($conn, $usuario); ?></p>
         <p><?php equiposSeleccionadosUsuario($conn, $usuario); ?></p>
         <p><?php //finalesUsuario($conn, $usuario); ?></p>
         <p><?php golesEncajadosUsuarioEdicion($conn, $usuario); ?></p>
     <?php
+    echo "</div>";
 }
 
 function estadisticasEquipo($conn, $equipo){
@@ -475,23 +478,61 @@ function estadisticasEquipo($conn, $equipo){
 function estadisticasEquiposTotal($conn){
     $query = "select id,nombre from equipo order by nombre asc;";
     $result = mysqli_query($conn, $query);
+    
+    
+    echo "<select onchange=\"ver_stats_equipos(this, ". mysqli_num_rows($result).")\">";
+    echo "<option value=\"null\">Seleccione un equipo</option>";
+    while($row = mysqli_fetch_assoc($result))
+    {
+        echo "<option value=\"".$row["id"]."\">".$row["nombre"]."</option>";
+    }
+    echo "</select>";
+    
+    $result = mysqli_query($conn, $query);
+    
     while($row = mysqli_fetch_assoc($result)){
         $equipo = $row["id"];
         //$equipo = 3;
+        
+        echo "<div id=\"stats_equipos_$equipo\" style=\"display: none;\">";
+        
         estadisticasEquipo($conn, $equipo);
         ?>
         <p><?php golesEquipoEdicionUsuario($conn, $equipo); ?></p>
         <?php
+        
+        echo "</div>";
     }
 }
 
 function estadisticasCompeticion($conn){
-    fechasEdiciones($conn);
-    //getTablaEquiposRegistrados($conn);
-    equiposSeleccionadosPorUsuario($conn);
-    //equiposSeleccionadosPorEdicion($conn);
-    goleadasPorPartido($conn);
-    goleadasPorEdicion($conn);
-    palmaresEquipoUsuario($conn);
-    palmares($conn);
+    ?>
+        <select onchange="ver_stats_competicion(this)">
+            <option value="null">Seleccione una tabla</option>
+            <option value="stats_competicion_fechas">Fechas Ediciones</option>
+            <option value="stats_competicion_seleccionados">Equipos seleccionados</option>
+            <option value="stats_competicion_goles_partido">Partidos con más goles</option>
+            <option value="stats_competicion_goles_edicion">Ediciones con más goles</option>
+            <option value="stats_competicion_palmares_equipo_usuario">Palmarés Equio + Jugador</option>
+            <option value="stats_competicion_palmares">Palmarés</option>
+    </select>
+      
+        <div id="stats_competicion_fechas" style="display: none;">
+            <?php fechasEdiciones($conn);?></div>
+    <div id="nanai" style="display: none;">
+        <?php //getTablaEquiposRegistrados($conn);?></div>
+    <div id="stats_competicion_seleccionados" style="display: none;">
+        <?php equiposSeleccionadosPorUsuario($conn);?></div>
+    <div id="nanai" style="display: none;">
+        <?php //equiposSeleccionadosPorEdicion($conn);?></div>
+    <div id="stats_competicion_goles_partido" style="display: none;">
+        <?php goleadasPorPartido($conn);?></div>
+    <div id="stats_competicion_goles_edicion" style="display: none;">
+        <?php goleadasPorEdicion($conn);?></div>
+    <div id="stats_competicion_palmares_equipo_usuario" style="display: none;">
+        <?php palmaresEquipoUsuario($conn);?></div>
+    <div id="stats_competicion_palmares" style="display: none;">
+        <?php palmares($conn);?></div>
+    
+    <?php
 }

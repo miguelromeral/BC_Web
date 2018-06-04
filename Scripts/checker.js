@@ -165,3 +165,79 @@ function ver_stats_clasificacion(obj, ned){
     }
     
 }
+function ver_stats_equipos(obj, ne){
+    var selectBox = obj;
+    var selected = selectBox.options[selectBox.selectedIndex].value;
+    
+    var paneles = [];
+    
+    var i;
+    var base = "stats_equipos_";
+    for (i = 1; i <= ne; i++) {
+        var nombre = base.concat(i);
+        var panel = document.getElementById(nombre);
+        panel.style.display = 'none';
+        paneles.push(panel);
+    }
+    
+    if(selected !== 'null'){
+        var ind = parseInt(selected) - 1;
+        paneles[ind].style.display = 'block';
+    }
+}
+function ver_stats_jugadores(obj, ne){
+    var selectBox = obj;
+    var selected = selectBox.options[selectBox.selectedIndex].value;
+    
+    var paneles = [];
+    
+    var i;
+    var base = "stats_jugadores_";
+    for (i = 1; i <= ne; i++) {
+        var nombre = base.concat(i);
+        var panel = document.getElementById(nombre);
+        panel.style.display = 'none';
+        paneles.push(panel);
+    }
+    
+    if(selected !== 'null'){
+        var ind = parseInt(selected) - 1;
+        paneles[ind].style.display = 'block';
+    }
+}
+function ver_stats_competicion(obj){
+    var selectBox = obj;
+    var selected = selectBox.options[selectBox.selectedIndex].value;
+    var pan1 = document.getElementById("stats_competicion_fechas");
+    var pan2 = document.getElementById("stats_competicion_seleccionados");
+    var pan3 = document.getElementById("stats_competicion_goles_partido");
+    var pan4 = document.getElementById("stats_competicion_goles_edicion");
+    var pan5 = document.getElementById("stats_competicion_palmares_equipo_usuario");
+    var pan6 = document.getElementById("stats_competicion_palmares");
+
+    pan1.style.display = "none";
+    pan2.style.display = "none";
+    pan3.style.display = "none";
+    pan4.style.display = "none";
+    pan5.style.display = "none";
+    pan6.style.display = "none";
+
+    if(selected === 'stats_competicion_fechas'){
+        pan1.style.display = "block";
+    }
+    else if(selected === 'stats_competicion_seleccionados'){
+        pan2.style.display = "block";
+    }
+    else if(selected === 'stats_competicion_goles_partido'){
+        pan3.style.display = "block";
+    }
+    else if(selected === 'stats_competicion_goles_edicion'){
+        pan4.style.display = "block";
+    }
+    else if(selected === 'stats_competicion_palmares_equipo_usuario'){
+        pan5.style.display = "block";
+    } 
+    else if(selected === 'stats_competicion_palmares'){
+        pan6.style.display = "block";
+    }   
+}

@@ -49,7 +49,23 @@ listaOpciones($conn);
         </div>
         <div id="stats_jugadores" style="display: none;">
             <h1>Estadísticas Jugador</h1>
-            <?php  for($i = 1; $i < 4; $i++){ estadisticasUsuario($conn, $i); }?>
+            <?php  
+            
+            
+            
+            $query = "select id,nombre from usuario order by id asc;";
+            $result = mysqli_query($conn, $query);
+
+            echo "<select onchange=\"ver_stats_jugadores(this, 3)\">";
+            echo "<option value=\"null\">Seleccione un jugador</option>";
+            while($row = mysqli_fetch_assoc($result))
+            {
+                echo "<option value=\"".$row["id"]."\">".$row["nombre"]."</option>";
+            }
+            echo "</select>";
+            for($i = 1; $i < 4; $i++){ 
+                estadisticasUsuario($conn, $i);
+            }?>
         </div>
         <div id="stats_equipos" style="display: none;">
             <h1>Estadísticas Equipo</h1>
