@@ -58,8 +58,8 @@ function getTablaEquiposRegistrados($conn){
         while($row = mysqli_fetch_assoc($result))
         {
             echo "<tr><td>";
-            echo $row["id"];
-            echo "</td><td>";
+            //echo $row["id"];
+            //echo "</td><td>";
             getImagenEquipoID($conn, $row["id"], 0.16);
             echo "</td><td>";
             echo $row["nombre"];

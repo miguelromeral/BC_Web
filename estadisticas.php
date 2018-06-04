@@ -21,6 +21,8 @@ listaEdiciones($conn);
         <?php listaTodosPartidos($conn); ?>
         <h1>Clasificación por Edición</h1>
         <?php listaTodasClasificaciones($conn); ?>
+        <h1>Estadísticas Competición</h1>
+        <?php estadisticasCompeticion($conn); ?>
         <h1>Estadísticas Jugador</h1>
         <?php for($i = 1; $i < 4; $i++){ estadisticasJugador($conn, $i); }?>
         <h1>Estadísticas Equipo</h1>

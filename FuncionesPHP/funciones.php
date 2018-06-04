@@ -465,3 +465,181 @@ function estadisticasEquiposTotal($conn){
         estadisticasEquipo($conn, $row["id"]);
     }
 }
+
+function estadisticasCompeticion($conn){
+    fechasEdiciones($conn);
+    getTablaEquiposRegistrados($conn);
+    equiposSeleccionadosPorUsuario($conn);
+    equiposSeleccionadosPorEdicion($conn);
+    goleadasPorPartido($conn);
+}
+
+function fechasEdiciones($conn){
+    $query = "select * from Edicion order by fecha desc;";
+    $result = mysqli_query($conn, $query);
+    ?>
+
+        <table border="1">
+            <tr>
+            <i>Celebración de ediciones</i>
+            </tr>
+            <tr>
+                <td>Edición</td>
+                <td>Fecha</td>
+            </tr>
+    <?php
+    while($row = mysqli_fetch_assoc($result)){
+        ?>
+            <tr>
+                <td><?= $row["id"] ?></td>
+                <td><?php echo date("d/m/Y", strtotime($row["fecha"]))." - ".$row["hora"].":".$row["mins"]; ?></td>
+            </tr>    
+        <?php
+    }
+    echo "</table>";
+}
+function equiposSeleccionadosPorUsuario($conn){
+    $query = "select e.nombre, n.user, count(n.user) as veces_cogido          
+   from Equipo as e          
+   inner join (          
+   	select distinct m.equipo, u.nombre as user, m.edicion          
+       from Marcador as m          
+       inner join Usuario as u          
+       on m.usuario = u.id          
+   ) as n          
+   on e.id = n.equipo          
+   group by e.nombre, n.user          
+   order by veces_cogido desc;";
+    $result = mysqli_query($conn, $query);
+    ?>
+
+        <table border="1">
+            <tr>
+            <i>Selección de equipos</i>
+            </tr>
+            <tr>
+                <td>Equipo</td>
+                <td>Usuario</td>
+                <td>Veces seleccionado</td>
+            </tr>
+    <?php
+    while($row = mysqli_fetch_assoc($result)){
+        ?>
+            <tr>
+                <td><?php
+                $eq = $row["nombre"];
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
+                echo " $eq";
+                ?></td>
+                <td><?php
+                $us = $row["user"];
+                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
+                echo " $us";
+                ?></td>
+                <td><?= $row["veces_cogido"] ?></td>
+            </tr>    
+        <?php
+    }
+    echo "</table>";
+}
+function equiposSeleccionadosPorEdicion($conn){
+    $query = "select e.nombre, n.user, n.edicion          
+   from Equipo as e          
+   inner join (          
+   	select distinct m.equipo, u.nombre as user,          
+       m.edicion          
+       from Marcador as m          
+       inner join Usuario as u          
+       on m.usuario = u.id          
+   ) as n          
+   on e.id = n.equipo          
+   order by n.edicion desc, n.user;";
+    $result = mysqli_query($conn, $query);
+    ?>
+
+        <table border="1">
+            <tr>
+            <i>Selección de equipos</i>
+            </tr>
+            <tr>
+                <td>Equipo</td>
+                <td>Usuario</td>
+                <td>Edición</td>
+            </tr>
+    <?php
+    while($row = mysqli_fetch_assoc($result)){
+        ?>
+            <tr>
+                <td><?php
+                $eq = $row["nombre"];
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
+                echo " $eq";
+                ?></td>
+                <td><?php
+                $us = $row["user"];
+                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
+                echo " $us";
+                ?></td>
+                <td><?= $row["edicion"] ?>ª</td>
+            </tr>    
+        <?php
+    }
+    echo "</table>";
+}
+
+function goleadasPorPartido($conn){
+    $query = "select max(m.goles) as maximo_goles_partido, e.nombre, m.tipo, m.num_ed, m.edicion, m.user, m.id
+   from (          
+       select p.tipo, p.id, p.num_ed, p.edicion, n.goles, n.equipo, n.nombre as user          
+       from (          
+       	select m.goles, m.equipo, u.nombre, m.partido          
+           from Usuario as u          
+           inner join Marcador as m          
+           on m.usuario = u.id       
+       ) as n          
+       inner join Partido as p          
+       on p.id = n.partido          
+   ) as m          
+   inner join Equipo as e          
+   on e.id = m.equipo          
+   group by e.nombre, m.tipo, m.num_ed, m.edicion, m.id, m.user
+   order by maximo_goles_partido desc          
+   limit 20;";
+    $result = mysqli_query($conn, $query);
+    ?>
+
+        <table border="1">
+            <tr>
+            <i>Mayores goleadas en partido</i>
+            </tr>
+            <tr>
+                <td>Goles</td>
+                <td>Equipo</td>
+                <td>Usuario</td>
+                <td>Edición</td>
+                <td>Tipo</td>
+                <td>#Partido</td>
+            </tr>
+    <?php
+    while($row = mysqli_fetch_assoc($result)){
+        ?>
+            <tr>
+                <td><?= $row["maximo_goles_partido"] ?></td>
+                <td><?php
+                $eq = $row["nombre"];
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
+                echo " $eq";
+                ?></td>
+                <td><?= $row["edicion"] ?>ª</td>
+                <td><?= $row["tipo"] ?></td>
+                <td><?php
+                $us = $row["user"];
+                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
+                echo " $us";
+                ?></td>
+                <td><?= $row["id"] ?>º</td>
+            </tr>    
+        <?php
+    }
+    echo "</table>";
+}
