@@ -109,6 +109,21 @@ function getTablaPartidosEdicion($conn, $edicion){
         {
             
             
+            getFilaPartido($conn, $row["id"]);
+        } 
+        echo "</table>";
+        mysqli_free_result($result); 
+    }else{
+        return "";
+    }
+}
+
+function getFilaPartido($conn, $id){
+    if ($conn){
+        $query = "SELECT * FROM partido where id = $id;";
+        $result = mysqli_query($conn, $query);
+        while($row = mysqli_fetch_assoc($result))
+        {
             echo "<tr id=\"p_tr\">";
             echo "<td id=\"p_td\">".$row["id"]."</td>";
             echo "<td id=\"p_td\">".$row["tipo"]."</td>";
@@ -150,10 +165,7 @@ function getTablaPartidosEdicion($conn, $edicion){
             }
             echo "</tr>";
         } 
-        echo "</table>";
         mysqli_free_result($result); 
-    }else{
-        return "";
     }
 }
 

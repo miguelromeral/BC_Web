@@ -371,9 +371,51 @@ function getUltimaUsuario($conn, $usuario){
 }
 
 function getUltimaEquipo($conn, $equipo){
-    return null;
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select a.partido, a.fecha          
+   from (          
+   	select m.goles, m.partido, m.equipo, u.nombre, u.id, m.fecha          
+       from Equipo as u          
+       inner join (          
+       	select m.usuario, m.goles, m.partido, m.equipo, m.fecha          
+           from(          
+               select m.usuario, m.goles, m.partido, m.equipo, e.fecha          
+               from Marcador as m          
+               inner join Edicion as e          
+               on m.edicion = e.id
+           )          
+           as m          
+           inner join Partido as p          
+           on m.partido = p.id
+           where p.tipo = 'Final'          
+       ) as m          
+       on m.equipo = u.id          
+       where u.nombre = '".$nombre."'          
+   ) as a          
+   inner join(          
+       select max(n2.goles) as max_goles, min(n2.goles) as min_goles, n1.partido, n2.ganador_penaltis          
+       from (          
+           select m.partido, e.id
+           from Equipo as e          
+           inner join Marcador as m          
+           on e.id = m.equipo          
+       ) as n1          
+       inner join          
+       (          
+           select m.goles, m.equipo, p.id, p.ganador_penaltis          
+           from Partido as p          
+           inner join Marcador as m          
+           on m.partido = p.id
+       ) as n2          
+       on n1.partido = n2.id          
+       group by n1.partido, n2.ganador_penaltis          
+       order by n1.partido          
+   ) as b          
+   on a.partido = b.partido          
+   where a.goles = b.max_goles and a.goles > b.min_goles or a.equipo = b.ganador_penaltis          
+   group by a.partido, a.fecha          
+   order by a.partido desc          
+   limit 1;";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["fecha"];
@@ -400,65 +442,131 @@ function getFinalesUsuario($conn, $usuario){
 }
 
 function getCampeonatosEquipo($conn, $equipo){
-    return "??";
-    $query = "";
+    $nombre = getNombreEquipo($conn, $equipo);
+    $query = "select count(a.partido)      as count    
+   from (          
+   	select m.goles, m.partido, e.nombre as equipo, e.id, m.nombre as jugador          
+       from Equipo as e          
+       inner join (          
+       	select m.goles, m.equipo, m.partido, m.nombre          
+           from (          
+           	select m.goles, m.equipo, m.partido, u.nombre          
+               from Marcador as m          
+               inner join Usuario as u          
+               on m.usuario = u.id          
+           ) as m          
+           inner join Partido as p          
+           on m.partido = p.id          
+           where p.tipo = 'Final'          
+       ) as m          
+       on m.equipo = e.id          
+       where e.nombre = '".$nombre."'          
+   ) as a          
+   inner join(          
+       select max(n2.goles) as max_goles, min(n2.goles) as min_goles, n1.partido, n2.ganador_penaltis          
+       from (          
+           select m.partido, e.id          
+           from Equipo as e          
+           inner join Marcador as m          
+           on e.id = m.equipo          
+       ) as n1          
+       inner join          
+       (          
+           select m.goles, m.equipo, p.id, p.ganador_penaltis          
+           from Partido as p          
+           inner join Marcador as m          
+           on m.partido = p.id
+       ) as n2          
+       on n1.partido = n2.id          
+       group by n1.partido, n2.ganador_penaltis          
+       order by n1.partido          
+   ) as b          
+   on a.partido = b.partido          
+   where a.goles = b.max_goles and a.goles > b.min_goles or a.id = b.ganador_penaltis;";
+   
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
-    return $row["BC_ganadas"];
+    return $row["count"];
 }
 
 function getPJEquipo($conn, $equipo){
-    return "??";
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(m.partido) as count
+from Equipo as u
+inner join Marcador as m
+on u.id = m.equipo
+where u.nombre = '".$nombre."';";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
-    return $row["cuenta"];
+    return $row["count"];
 }
 
-function getNumeroEquiposEquipo($conn, $equipo){
-    return "??";
+function getNumeroEntrenadoresEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(u.nombre) as count       
+   from Usuario as u          
+   inner join (          
+   	select distinct m.usuario
+       from Marcador as m          
+       inner join Equipo as e          
+       on m.equipo = e.id          
+       where e.nombre = '".$nombre."'          
+             
+   ) as n          
+   on u.id = n.usuario;";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
-    return $row["cuenta"];
+    $ent = $row["count"]; 
+    if ($ent == 3){
+        return "Entrenado por todos";
+    }elseif($ent == 0){
+        return "Sin entrenadores";
+    }else{
+        return $ent;
+    }
 }
 
-function getTAEquipo($conn, $usuario){
-    return "??";
+function getTAEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select sum(m.ta) as ta          
+from Marcador as m          
+inner join Equipo as u          
+on m.equipo = u.id
+where u.nombre = '".$nombre."';";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["ta"];
 }
 
 function getTREquipo($conn, $equipo){
-    return "??";
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select sum(m.tr) as tr          
+from Marcador as m          
+inner join Equipo as u          
+on m.equipo = u.id
+where u.nombre = '".$nombre."';";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["tr"];
 }
 
 function getTPEquipo($conn, $equipo){
-    return "??";
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(m.partido) as tandas
+from Equipo as u
+inner join 
+(
+	select m.partido, m.equipo
+    from Partido as p
+    inner join Marcador as m
+    on p.id = m.partido
+    where p.penaltis
+) as m
+on u.id = m.equipo
+where u.nombre = '".$nombre."'";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["tandas"];
-}
-
-function getPREquipo($conn, $equipo){
-    return "??";
-    $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
-    $result = mysqli_query($conn, $query);
-    $row = mysqli_fetch_assoc($result);
-    return $row["pr"];
 }
 
 function getGFEquipo($conn, $equipo){
@@ -533,9 +641,37 @@ function getPGEquipo($conn, $equipo){
 
 
 function getPEEquipo($conn, $equipo){
-    return 0;
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(a.partido) as count  
+ from (      
+ 	select m.goles, m.partido
+     from Marcador as m      
+     inner join      
+     Equipo as u      
+     on m.equipo = u.id
+     where u.nombre = '".$nombre."'    
+ ) as a      
+ inner join(      
+     select max(n2.goles) as max_goles, min(n2.goles) as min_goles, n1.partido      
+     from (      
+         select m.partido, e.id
+         from Equipo as e      
+         inner join Marcador as m      
+         on e.id = m.equipo      
+     ) as n1      
+     inner join      
+     (      
+         select m.goles, m.equipo, p.id as partido
+         from Partido as p      
+         inner join Marcador as m      
+         on m.partido = p.id
+     ) as n2      
+     on n1.partido = n2.partido      
+     group by n1.partido      
+     order by n1.partido      
+ ) as b      
+ on a.partido = b.partido      
+ where a.goles = b.max_goles and a.goles = b.min_goles;";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
@@ -544,37 +680,113 @@ function getPEEquipo($conn, $equipo){
 
 
 function getPPEquipo($conn, $equipo){
-    return "??";
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(a.partido) as count  
+ from (      
+ 	select m.goles, m.partido
+     from Marcador as m      
+     inner join      
+     Equipo as u      
+     on m.equipo = u.id
+     where u.nombre = '".$nombre."'    
+ ) as a      
+ inner join(      
+     select max(n2.goles) as max_goles, min(n2.goles) as min_goles, n1.partido      
+     from (      
+         select m.partido, e.id
+         from Equipo as e      
+         inner join Marcador as m      
+         on e.id = m.equipo      
+     ) as n1      
+     inner join      
+     (      
+         select m.goles, m.equipo, p.id as partido
+         from Partido as p      
+         inner join Marcador as m      
+         on m.partido = p.id
+     ) as n2      
+     on n1.partido = n2.partido      
+     group by n1.partido      
+     order by n1.partido      
+ ) as b      
+ on a.partido = b.partido      
+ where a.goles < b.max_goles and a.goles = b.min_goles;";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
 
 function getPrimeroFGEquipo($conn, $equipo){
-    return "??";
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(m.id) as count       
+   from Equipo as u          
+   inner join(          
+   	select p.id, m.equipo          
+       from Marcador as m          
+       inner join Partido as p          
+       on m.partido = p.id          
+       where p.tipo = 'Final' and m.local = 1          
+   ) as m          
+   on u.id = m.equipo
+   where u.nombre = '".$nombre."' ;";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
 
 function getPENGEquipo($conn, $equipo){
-    return "??";
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(p.id)     as count     
+   from Partido as p          
+   inner join          
+   (          
+       select u.id, m.equipo, m.partido          
+       from Marcador as m          
+       inner join Equipo as u          
+       on u.id = m.equipo          
+      where u.nombre = '".$nombre."'          
+   ) as n          
+   on p.id = n.partido          
+   where p.penaltis and p.ganador_penaltis = n.equipo";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
 
 function getFinalesEquipo($conn, $equipo){
-    return "??";
     $nombre = getNombreEquipo($conn, $equipo);
-    $query = "";
+    $query = "select count(m.partido) as count  
+   from Equipo as u          
+   inner join           
+   (          
+   	select m.partido, m.equipo
+       from Partido as p          
+       inner join Marcador as m          
+       on p.id = m.partido          
+       where p.tipo = 'Final'          
+   ) as m          
+   on u.id = m.equipo          
+   where u.nombre = '".$nombre."';";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
+}
+
+function getPREquipo($conn, $equipo){
+    $nombre = getNombreEquipo($conn, $equipo);
+    $query = "select count(m.partido) as pr
+from Equipo as u
+inner join 
+(
+	select m.partido, m.equipo
+    from Partido as p
+    inner join Marcador as m
+    on p.id = m.partido
+    where p.prorroga
+) as m
+on u.id = m.equipo
+where u.nombre = '".$nombre."'";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    return $row["pr"];
 }

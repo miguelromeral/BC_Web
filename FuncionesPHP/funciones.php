@@ -332,7 +332,7 @@ function estadisticasJugador($conn, $jugador){
     </tr>
     <tr>
         <td>%Victorias</td>
-        <td><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj)); } else { echo "NaN"; } ?></td>
+        <td><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj) * 100); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
         <td>T.P Ganadas</td>
@@ -439,15 +439,15 @@ function estadisticasEquipo($conn, $equipo){
     </tr>
     <tr>
         <td>%Victorias</td>
-        <td><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj)); } else { echo "NaN"; } ?></td>
+        <td><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj) * 100); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
         <td>T.P Ganadas</td>
         <td><?php echo $tpg." / ".getTPEquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
-        <td>Equipos</td>
-        <td><?= getNumeroEquiposEquipo($conn, $equipo) ?></td>
+        <td>Entrenadores</td>
+        <td><?= getNumeroEntrenadoresEquipo($conn, $equipo) ?></td>
     </tr>
 </table>
 

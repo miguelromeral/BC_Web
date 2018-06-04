@@ -9,3 +9,4 @@ INSERT INTO equipo (id, nombre, imagen) VALUES ('1', 'Real Madrid CF', '??');
 INSERT INTO equipo (id, nombre, imagen) VALUES ('2', 'FC Barcelona', '??');
 INSERT INTO equipo (id, nombre, imagen) VALUES ('3', 'FC Bayern Munich', '??');
 INSERT INTO equipo (id, nombre, imagen) VALUES ('4', 'Juventus', '??');
+INSERT INTO equipo (id, nombre, imagen) VALUES ('5', 'Arsenal FC', '??');
