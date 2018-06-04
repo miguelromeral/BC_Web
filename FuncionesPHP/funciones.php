@@ -269,8 +269,8 @@ function estadisticasJugador($conn, $jugador){
 <h1><?= getUsuarioFromID($conn, $jugador) ?></h1>
 <table>
     <tr>
-        <td id="td_ucl_blue">Campeonatos</td>
-        <td id="td_ucl_blue"><?= getCampeonatosUsuario($conn, $jugador) ?></td>
+        <td id="td_ucl_blue">Títulos</td>
+        <td id="td_ucl_white_bold" style="font-size: 46px;"><?= getCampeonatosUsuario($conn, $jugador) ?></td>
     </tr>
     <tr>
         <td id="td_ucl_blue">Último título</td>
@@ -282,19 +282,19 @@ function estadisticasJugador($conn, $jugador){
         <td id="td_ucl_white"><?= $pts ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">PJ</td>
+        <td id="td_ucl_blue">Partidos</td>
         <td id="td_ucl_white"><?= $pj ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">PG</td>
+        <td id="td_ucl_blue">Victorias</td>
         <td id="td_ucl_white"><?= $pg ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">PE</td>
+        <td id="td_ucl_blue">Empates</td>
         <td id="td_ucl_white"><?= $pe ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">PP</td>
+        <td id="td_ucl_blue">Derrotas</td>
         <td id="td_ucl_white"><?= $pp ?></td>
     </tr>
     <tr>
@@ -310,31 +310,31 @@ function estadisticasJugador($conn, $jugador){
         <td id="td_ucl_white"><?= getFinalesUsuario($conn, $jugador) ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">TA</td>
+        <td id="td_ucl_blue">T. Amarillas</td>
         <td id="td_ucl_white"><?= $ta ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">TR</td>
+        <td id="td_ucl_blue">T. Rojas</td>
         <td id="td_ucl_white"><?= $tr ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">T/P</td>
+        <td id="td_ucl_blue">Tarj/Partido</td>
         <td id="td_ucl_white"><?php if ($pj > 0) { printf("%.2f", (($ta + $tr) / $pj)); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">GF</td>
+        <td id="td_ucl_blue">Goles marcados</td>
         <td id="td_ucl_white"><?= $gf ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">GC</td>
+        <td id="td_ucl_blue">Goles encajados</td>
         <td id="td_ucl_white"><?= $gc ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">DG</td>
+        <td id="td_ucl_blue">Diferencia Goles</td>
         <td id="td_ucl_white"><?= $dg ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">G/P</td>
+        <td id="td_ucl_blue">Goles/Partido</td>
         <td id="td_ucl_white"><?php if ($pj > 0) { printf("%.2f", ($gf / $pj)); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
@@ -350,13 +350,15 @@ function estadisticasJugador($conn, $jugador){
         <td id="td_ucl_white"><?= getNumeroEquiposUsuario($conn, $jugador) ?></td>
     </tr>
 </table>
+    <?php
+}
 
-<p><?php equiposSeleccionadosUsuario($conn, $jugador); ?></p>
-<p><?php finalesUsuario($conn, $jugador); ?></p>
-<p><?php golesEncajadosUsuarioEdicion($conn, $jugador); ?></p>
-
-        
-
+function estadisticasUsuario($conn, $usuario){
+    estadisticasJugador($conn, $usuario);
+    ?>
+        <p><?php equiposSeleccionadosUsuario($conn, $usuario); ?></p>
+        <p><?php //finalesUsuario($conn, $usuario); ?></p>
+        <p><?php golesEncajadosUsuarioEdicion($conn, $usuario); ?></p>
     <?php
 }
 
@@ -377,94 +379,89 @@ function estadisticasEquipo($conn, $equipo){
 <hr>
         <?php getImagenEquipoID($conn, $equipo, 0.5); ?>
 <h1><?= getNombreEquipo($conn, $equipo) ?></h1>
-<table border="1">
+<table>
     <tr>
-        <td>Campeonatos</td>
-        <td><?= getCampeonatosEquipo($conn, $equipo) ?></td>
+        <td id="td_ucl_blue">Campeonatos</td>
+        <td id="td_ucl_white_bold" style="font-size: 46px;"><?= getCampeonatosEquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
-        <td>Último título</td>
-        <td><?php $fec = getUltimaEquipo($conn, $equipo);
+        <td id="td_ucl_blue">Último título</td>
+        <td id="td_ucl_white"><?php $fec = getUltimaEquipo($conn, $equipo);
         if($fec) { echo date("d/m/Y", strtotime($fec)); } else { echo "Sin títulos"; }?></td>
     </tr>
     <tr>
-        <td>PTS Totales</td>
-        <td><?= $pts ?></td>
+        <td id="td_ucl_blue">PTS Totales</td>
+        <td id="td_ucl_white"><?= $pts ?></td>
     </tr>
     <tr>
-        <td>PJ</td>
-        <td><?= $pj ?></td>
+        <td id="td_ucl_blue">Partidos</td>
+        <td id="td_ucl_white"><?= $pj ?></td>
     </tr>
     <tr>
-        <td>PG</td>
-        <td><?= $pg ?></td>
+        <td id="td_ucl_blue">Victorias</td>
+        <td id="td_ucl_white"><?= $pg ?></td>
     </tr>
     <tr>
-        <td>PE</td>
-        <td><?= $pe ?></td>
+        <td id="td_ucl_blue">Empates</td>
+        <td id="td_ucl_white"><?= $pe ?></td>
     </tr>
     <tr>
-        <td>PP</td>
-        <td><?= $pp ?></td>
+        <td id="td_ucl_blue">Derrotas</td>
+        <td id="td_ucl_white"><?= $pp ?></td>
     </tr>
     <tr>
-        <td>1º FG</td>
-        <td><?= getPrimeroFGEquipo($conn, $equipo) ?></td>
+        <td id="td_ucl_blue">1º FG</td>
+        <td id="td_ucl_white"><?= getPrimeroFGEquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
-        <td>Prórrogas</td>
-        <td><?= getPREquipo($conn, $equipo) ?></td>
+        <td id="td_ucl_blue">Prórrogas</td>
+        <td id="td_ucl_white"><?= getPREquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
-        <td>Finales</td>
-        <td><?= getFinalesEquipo($conn, $equipo) ?></td>
+        <td id="td_ucl_blue">Finales</td>
+        <td id="td_ucl_white"><?= getFinalesEquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
-        <td>TA</td>
-        <td><?= $ta ?></td>
+        <td id="td_ucl_blue">T. Amarillas</td>
+        <td id="td_ucl_white"><?= $ta ?></td>
     </tr>
     <tr>
-        <td>TR</td>
-        <td><?= $tr ?></td>
+        <td id="td_ucl_blue">T. Rojas</td>
+        <td id="td_ucl_white"><?= $tr ?></td>
     </tr>
     <tr>
-        <td>T/P</td>
-        <td><?php if ($pj > 0) { printf("%.2f", (($ta + $tr) / $pj)); } else { echo "NaN"; } ?></td>
+        <td id="td_ucl_blue">Tarj/Partido</td>
+        <td id="td_ucl_white"><?php if ($pj > 0) { printf("%.2f", (($ta + $tr) / $pj)); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
-        <td>GF</td>
-        <td><?= $gf ?></td>
+        <td id="td_ucl_blue">Goles marcados</td>
+        <td id="td_ucl_white"><?= $gf ?></td>
     </tr>
     <tr>
-        <td>GC</td>
-        <td><?= $gc ?></td>
+        <td id="td_ucl_blue">Goles encajados</td>
+        <td id="td_ucl_white"><?= $gc ?></td>
     </tr>
     <tr>
-        <td>DG</td>
-        <td><?= $dg ?></td>
+        <td id="td_ucl_blue">Diferencia Goles</td>
+        <td id="td_ucl_white"><?= $dg ?></td>
     </tr>
     <tr>
-        <td>G/P</td>
-        <td><?php if ($pj > 0) { printf("%.2f", ($gf / $pj)); } else { echo "NaN"; } ?></td>
+        <td id="td_ucl_blue">Goles/Partido</td>
+        <td id="td_ucl_white"><?php if ($pj > 0) { printf("%.2f", ($gf / $pj)); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
-        <td>%Victorias</td>
-        <td><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj) * 100); } else { echo "NaN"; } ?></td>
+        <td id="td_ucl_blue">%Victorias</td>
+        <td id="td_ucl_white"><?php if ($pj > 0) { printf("%.2f %%", ($pg / $pj) * 100); } else { echo "NaN"; } ?></td>
     </tr>
     <tr>
-        <td>T.P Ganadas</td>
-        <td><?php echo $tpg." / ".getTPEquipo($conn, $equipo) ?></td>
+        <td id="td_ucl_blue">T.P Ganadas</td>
+        <td id="td_ucl_white"><?php echo $tpg." / ".getTPEquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
-        <td>Entrenadores</td>
-        <td><?= getNumeroEntrenadoresEquipo($conn, $equipo) ?></td>
+        <td id="td_ucl_blue">Entrenadores</td>
+        <td id="td_ucl_white"><?= getNumeroEntrenadoresEquipo($conn, $equipo) ?></td>
     </tr>
 </table>
-
-<p><?php golesEquipoEdicionUsuario($conn, $equipo); ?></p>
-
-        
-
     <?php
 }
 
@@ -472,16 +469,21 @@ function estadisticasEquipo($conn, $equipo){
 function estadisticasEquiposTotal($conn){
     $query = "select id,nombre from equipo order by nombre asc;";
     $result = mysqli_query($conn, $query);
-    while($row = mysqli_fetch_assoc($result)){
-        estadisticasEquipo($conn, $row["id"]);
-    }
+    //while($row = mysqli_fetch_assoc($result)){
+        //$equipo = $row["id"];
+        $equipo = 3;
+        estadisticasEquipo($conn, $equipo);
+        ?>
+        <p><?php golesEquipoEdicionUsuario($conn, $equipo); ?></p>
+        <?php
+    //}
 }
 
 function estadisticasCompeticion($conn){
     fechasEdiciones($conn);
-    getTablaEquiposRegistrados($conn);
+    //getTablaEquiposRegistrados($conn);
     equiposSeleccionadosPorUsuario($conn);
-    equiposSeleccionadosPorEdicion($conn);
+    //equiposSeleccionadosPorEdicion($conn);
     goleadasPorPartido($conn);
     goleadasPorEdicion($conn);
     palmaresEquipoUsuario($conn);

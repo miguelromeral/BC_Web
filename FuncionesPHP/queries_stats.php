@@ -837,30 +837,31 @@ function palmares($conn){
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Campeones</i>
             </tr>
-            <tr>
-                <td>Equipo</td>
-                <td>Usuario</td>
+            <tr id="td_ucl_blue">
+                <td colspan="2">Equipo</td>
+                
+                <td colspan="2">Usuario</td>
                 <td>Edición</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
-            <tr>
+            <tr id="td_ucl_white">
                 <td><?php
                 $eq = $row["equipo"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
-                echo " $eq";
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.1);
                 ?></td>
+                <td><?= $eq ?></td>
                 <td><?php
                 $us = $row["jugador"];
-                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
-                echo " $us";
+                getImagenUsuario(getIDUsuario($conn, $us), 0.15);
                 ?></td>
-                <td><?= $row["edicion"] ?>ª</td>
+                <td><?= $us ?></td>
+                <td id="td_ucl_white_bold"><?= $row["edicion"] ?>ª</td>
             </tr>    
         <?php
     }
@@ -873,20 +874,20 @@ function fechasEdiciones($conn){
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Celebración de ediciones</i>
             </tr>
             <tr>
-                <td>Edición</td>
-                <td>Fecha</td>
+                <td id="td_ucl_blue">Edición</td>
+                <td id="td_ucl_blue">Fecha</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
             <tr>
-                <td><?= $row["id"] ?></td>
-                <td><?php echo date("d/m/Y", strtotime($row["fecha"]))." - ".$row["hora"].":".$row["mins"]; ?></td>
+                <td id="td_ucl_blue"><?= $row["id"] ?></td>
+                <td id="td_ucl_white"><?php echo date("d/m/Y", strtotime($row["fecha"]))." - ".$row["hora"].":".$row["mins"]; ?></td>
             </tr>    
         <?php
     }
@@ -903,34 +904,34 @@ function equiposSeleccionadosPorUsuario($conn){
    ) as n          
    on e.id = n.equipo          
    group by e.nombre, n.user          
-   order by veces_cogido desc;";
+   order by veces_cogido desc limit 20;";
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Equipos más utilizados</i>
             </tr>
             <tr>
-                <td>Equipo</td>
-                <td>Usuario</td>
-                <td>Veces seleccionado</td>
+                <td id="td_ucl_blue" colspan="2">Equipo</td>
+                <td id="td_ucl_blue" colspan="2">Usuario</td>
+                <td id="td_ucl_blue">Veces seleccionado</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
-            <tr>
+            <tr id="td_ucl_white">
                 <td><?php
                 $eq = $row["nombre"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
-                echo " $eq";
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.1);
                 ?></td>
+                <td><?= $eq ?></td>
                 <td><?php
                 $us = $row["user"];
-                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
-                echo " $us";
+                getImagenUsuario(getIDUsuario($conn, $us), 0.15);
                 ?></td>
-                <td><?= $row["veces_cogido"] ?></td>
+                <td><?= $us ?></td>
+                <td id="td_ucl_white_bold"><?= $row["veces_cogido"] ?></td>
             </tr>    
         <?php
     }
@@ -956,7 +957,7 @@ function equiposSeleccionadosPorEdicion($conn){
             <i>Selección de equipos</i>
             </tr>
             <tr>
-                <td>Equipo</td>
+                
                 <td>Usuario</td>
                 <td>Edición</td>
             </tr>
@@ -966,12 +967,12 @@ function equiposSeleccionadosPorEdicion($conn){
             <tr>
                 <td><?php
                 $eq = $row["nombre"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.1);
                 echo " $eq";
                 ?></td>
                 <td><?php
                 $us = $row["user"];
-                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
+                getImagenUsuario(getIDUsuario($conn, $us), 0.15);
                 echo " $us";
                 ?></td>
                 <td><?= $row["edicion"] ?>ª</td>
@@ -1002,35 +1003,36 @@ function goleadasPorPartido($conn){
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Mayores goleadas en partido</i>
             </tr>
-            <tr>
+            <tr id="td_ucl_blue">
                 <td>Goles</td>
-                <td>Equipo</td>
+                <td colspan="2">Equipo</td>
+                
                 <td>Edición</td>
                 <td>Tipo</td>
-                <td>Usuario</td>
+                <td colspan="2">Usuario</td>
                 <td>#Partido</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
-            <tr>
-                <td><?= $row["maximo_goles_partido"] ?></td>
+            <tr id="td_ucl_white">
+                <td id="td_ucl_white_bold"><?= $row["maximo_goles_partido"] ?></td>
                 <td><?php
                 $eq = $row["nombre"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
-                echo " $eq";
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.1);
                 ?></td>
+                <td><?= $eq ?></td>
                 <td><?= $row["edicion"] ?>ª</td>
                 <td><?= $row["tipo"] ?></td>
                 <td><?php
                 $us = $row["user"];
-                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
-                echo " $us";
+                getImagenUsuario(getIDUsuario($conn, $us), 0.15);
                 ?></td>
+                <td><?= $us ?></td>
                 <td><?= $row["id"] ?>º</td>
             </tr>    
         <?php
@@ -1053,31 +1055,34 @@ function goleadasPorEdicion($conn){
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Mayores goleadas en edición</i>
             </tr>
-            <tr>
+            <tr id="td_ucl_blue">
                 <td>Goles</td>
-                <td>Equipo</td>
-                <td>Usuario</td>
+                <td colspan="2">Equipo</td>
+                
+                <td colspan="2">Usuario</td>
                 <td>Edición</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
-            <tr>
-                <td><?= $row["suma_goles_edicion"] ?></td>
+            <tr id="td_ucl_white">
+                <td id="td_ucl_white_bold"><?= $row["suma_goles_edicion"] ?></td>
+                
+                
                 <td><?php
                 $eq = $row["equipo"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
-                echo " $eq";
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.1);
                 ?></td>
+                <td><?= $eq ?></td>
                 <td><?php
                 $us = $row["usuario"];
-                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
-                echo " $us";
+                getImagenUsuario(getIDUsuario($conn, $us), 0.15);
                 ?></td>
+                <td><?= $us ?></td>
                 <td><?= $row["edicion"] ?>ª</td>
             </tr>    
         <?php
@@ -1125,34 +1130,33 @@ function palmaresEquipoUsuario($conn){
    on a.partido = b.partido          
    where a.goles = b.max_goles and a.goles > b.min_goles or a.id = b.ganador_penaltis          
    group by a.equipo, a.jugador          
-   order by BC_ganadas_equipo_jugador desc;";
+   order by BC_ganadas_equipo_jugador desc limit 10;";
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Más títulos por Equipo y Usuario</i>
             </tr>
-            <tr>
+            <tr id="td_ucl_blue">
                 <td>Títulos</td>
-                <td>Equipo</td>
-                <td>Usuario</td>
+                <td colspan="2">Equipo</td>
+                
+                <td colspan="2">Usuario</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
-            <tr>
-                <td><?= $row["BC_ganadas_equipo_jugador"] ?></td>
+            <tr id="td_ucl_white">
+                <td id="td_ucl_white_bold"><?= $row["BC_ganadas_equipo_jugador"] ?></td>
                 <td><?php
                 $eq = $row["equipo"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
-                echo " $eq";
-                ?></td>
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.1); ?></td>
+                <td><?= $eq ?></td>
                 <td><?php
                 $us = $row["jugador"];
-                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
-                echo " $us";
-                ?></td>
+                getImagenUsuario(getIDUsuario($conn, $us), 0.15); ?></td>
+                <td><?= $us ?></td>
             </tr>    
         <?php
     }
@@ -1174,24 +1178,26 @@ order by n.edicion desc;";
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Equipos seleccionados por edición</i>
             </tr>
             <tr>
-                <td>Equipo</td>
-                <td>Edición</td>
+                <td id="td_ucl_blue">Edición</td>
+                <td id="td_ucl_blue" colspan="2">Equipo</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
             <tr>
-                <td><?php
+                <td id="td_ucl_blue"><?= $row["edicion"] ?>ª</td>
+                <td id="td_ucl_white"><?php
                 $eq = $row["nombre"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
-                echo " $eq";
+                echo "$eq";
                 ?></td>
-                <td><?= $row["edicion"] ?></td>
+                <td id="td_ucl_white"><?php
+                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.1);
+                ?></td>
             </tr>    
         <?php
     }
@@ -1239,24 +1245,24 @@ inner join (
 ) as b
 on a.partido = b.partido
 group by b.edicion
-order by suma_goles desc;";
+order by suma_goles desc limit 10;";
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Goles encajados por edición</i>
             </tr>
             <tr>
-                <td>Goles encajados</td>
-                <td>Edición</td>
+                <td id="td_ucl_blue">Edición</td>
+                <td id="td_ucl_blue">Goles encajados</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
             <tr>
-                <td><?= $row["suma_goles"] ?></td>
-                <td><?= $row["edicion"] ?></td>
+                <td id="td_ucl_blue"><?= $row["edicion"] ?>ª</td>
+                <td id="td_ucl_white"><?= $row["suma_goles"] ?></td>
             </tr>    
         <?php
     }
@@ -1286,32 +1292,26 @@ function golesEquipoEdicionUsuario($conn, $equipo){
     $result = mysqli_query($conn, $query);
     ?>
 
-        <table border="1">
+        <table>
             <tr>
             <i>Goles marcados por edición</i>
             </tr>
-            <tr>
+            <tr id="td_ucl_blue">
                 <td>Edición</td>
+                <td colspan="2">Usuario</td>
                 <td>Goles</td>
-                <td>Equipo</td>
-                <td>Usuario</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
         ?>
-            <tr>
-                <td><?= $row["edicion"] ?></td>
-                <td><?= $row["suma_goles_edicion"] ?></td>
-                <td><?php
-                $eq = $row["equipo"];
-                getImagenEquipoID($conn, getIDEquipo($conn, $eq), 0.07);
-                echo " $eq";
-                ?></td>
+            <tr id="td_ucl_white">
+                <td><?= $row["edicion"] ?>ª</td>
                 <td><?php
                 $us = $row["usuario"];
-                getImagenUsuario(getIDUsuario($conn, $us), 0.1);
-                echo " $us";
+                getImagenUsuario(getIDUsuario($conn, $us), 0.15);
                 ?></td>
+                <td><?= $us ?></td>
+                <td id="td_ucl_white_bold"><?= $row["suma_goles_edicion"] ?></td>
             </tr>    
         <?php
     }

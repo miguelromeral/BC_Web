@@ -18,15 +18,15 @@ $ne = getNumeroEdiciones($conn);
 listaEdiciones($conn);
 ?>
         <h1>Partidos por Edición</h1>
-        <?php //listaTodosPartidos($conn); ?>
+        <?php listaTodosPartidos($conn); ?>
         <h1>Clasificación por Edición</h1>
-        <?php //listaTodasClasificaciones($conn); ?>
+        <?php listaTodasClasificaciones($conn); ?>
         <h1>Estadísticas Competición</h1>
-        <?php //estadisticasCompeticion($conn); ?>
+        <?php  estadisticasCompeticion($conn); ?>
         <h1>Estadísticas Jugador</h1>
-        <?php for($i = 1; $i < 4; $i++){ estadisticasJugador($conn, $i); }?>
+        <?php  for($i = 1; $i < 4; $i++){ estadisticasUsuario($conn, $i); }?>
         <h1>Estadísticas Equipo</h1>
-        <?php //estadisticasEquiposTotal($conn); ?>
+        <?php estadisticasEquiposTotal($conn); ?>
 
        
 </center></body>
