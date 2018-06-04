@@ -160,9 +160,9 @@ function getFilaPartido($conn, $id){
                 echo "<td id=\"p_td\">Ganó (P): ";
                 getImagenEquipoID($conn, $row["ganador_penaltis"], 0.16); 
                 echo "</td>";
-            }else{
+            }/*else{
                 echo "<td style=\" opacity: 0.0; \">---------------------------------</td>";
-            }
+            }*/
             echo "</tr>";
         } 
         mysqli_free_result($result); 

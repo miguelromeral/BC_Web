@@ -51,7 +51,6 @@ $_SESSION['en_partido'] = true;
                 <tr>
                     <td>Equipo</td>
                     <td>Usuario</td>
-                    <td>Escudo</td>
                     <td>Goles</td>
                     <td>TA</td>
                     <td>TR</td>
@@ -64,9 +63,8 @@ $_SESSION['en_partido'] = true;
                     <?php } ?>
                 </tr>
                 <tr>
-                    <td><?= $el ?></td>
-                    <td><?= $ul ?></td>
-                    <td><?php getImagenEquipoNombre($conn, $el, 50, 50) ?></td>
+                    <td><?php getImagenEquipoNombre($conn, $el, 50, 50); echo " $el"; ?></td>
+                    <td><?php getImagenUsuario(getIDUsuario($conn, $ul), 0.3); echo " $ul"; ?></td>
                     <td><input type="number" name="gl" min="0" value="0"></td>
                     <td><input type="number" name="tal" min="0" value="0"></td>
                     <td><input type="number" name="trl" min="0" max="5" value="0"></td>
@@ -80,9 +78,8 @@ $_SESSION['en_partido'] = true;
                 </tr>
                 
                 <tr>
-                    <td><?= $ev ?></td>
-                    <td><?= $uv ?></td>
-                    <td><?php getImagenEquipoNombre($conn, $ev, 50, 50) ?></td>
+                    <td><?php getImagenEquipoNombre($conn, $ev, 50, 50); echo " $ev"; ?></td>
+                    <td><?php getImagenUsuario(getIDUsuario($conn, $uv), 0.3); echo " $uv"; ?></td>
                     <td><input type="number" name="gv" min="0" value="0"></td>
                     <td><input type="number" name="tav" min="0" value="0"></td>
                     <td><input type="number" name="trv" min="0" max="5" value="0"></td>

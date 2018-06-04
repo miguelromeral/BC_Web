@@ -153,6 +153,7 @@ function guardarEnLogEquipo($query){
 function crearEsquema($conn){
     echo "Creo el esquema <br>";
     $query = "create database bc;";
+    guardarEnLog($query);
     $result = mysqli_query($conn, $query);
     $query = "Create table bc.partido
 (
@@ -165,6 +166,7 @@ function crearEsquema($conn){
 	ganador_penaltis Integer,	-- ID del equipo ganador en penaltis
  primary key (id)
 );";
+    guardarEnLog($query);
     $result = mysqli_query($conn, $query);
     $query = "Create table bc.usuario
 (
@@ -172,6 +174,7 @@ function crearEsquema($conn){
 	nombre Varchar(20) NOT NULL,	-- Nombre del usuario
  primary key (id)
 );";
+    guardarEnLog($query);
     $result = mysqli_query($conn, $query);
     $query = "Create table bc.equipo
 (
@@ -180,6 +183,7 @@ function crearEsquema($conn){
 	imagen longblob NOT NULL,		-- Imagen
  primary key (id)
 );";
+    guardarEnLog($query);
     $result = mysqli_query($conn, $query);
     $query = "Create table bc.marcador
 (
@@ -193,6 +197,7 @@ function crearEsquema($conn){
 	tr Integer NOT NULL,			-- Tarjetas Rojas
  primary key (partido,local)
 );";
+    guardarEnLog($query);
     $result = mysqli_query($conn, $query);
     $query = "Create table bc.edicion
 (
@@ -202,6 +207,7 @@ function crearEsquema($conn){
 	mins Integer NOT NULL,		-- Minutos
  primary key (id)
 );";
+    guardarEnLog($query);
     $result = mysqli_query($conn, $query);
     $query = "Create table bc.eleccion
 (
@@ -210,6 +216,7 @@ function crearEsquema($conn){
 	equipo Integer Not null,
 	PRIMARY KEY(edicion, usuario, equipo)
 );";
+    guardarEnLog($query);
     $result = mysqli_query($conn, $query);
 }
 
@@ -229,7 +236,7 @@ function listaTodosPartidos ($conn){
     $ned = getNumeroEdiciones($conn);
     echo "<p>Partidos por edición:<br>";
     for ($i=1; $i <= $ned; $i++){
-        echo "Edición ".$i."ª<br>";
+        echo "<h2>Edición ".$i."ª</h2>";
         getTablaPartidosEdicion($conn, $i);
     }
     echo "</p>";
@@ -615,9 +622,9 @@ function goleadasPorPartido($conn){
             <tr>
                 <td>Goles</td>
                 <td>Equipo</td>
-                <td>Usuario</td>
                 <td>Edición</td>
                 <td>Tipo</td>
+                <td>Usuario</td>
                 <td>#Partido</td>
             </tr>
     <?php
