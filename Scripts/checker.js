@@ -241,3 +241,60 @@ function ver_stats_competicion(obj){
         pan6.style.display = "block";
     }   
 }
+function ver_stats_partidos(obj, ne){
+    var selectBox = obj;
+    var selected = selectBox.options[selectBox.selectedIndex].value;
+    
+    var paneles = [];
+    
+    var i;
+    var base = "stats_partidos_";
+    for (i = 1; i <= ne; i++) {
+        var nombre = base.concat(i);
+        var panel = document.getElementById(nombre);
+        panel.style.display = 'none';
+        paneles.push(panel);
+    }
+    
+    if(selected !== 'null'){
+        var ind = parseInt(selected) - 1;
+        paneles[ind].style.display = 'block';
+    }
+}
+
+// Cronometro: http://codigoprogramacion.com/cursos/javascript/control-de-tiempo-usando-setinterval-practica-cronometro-en-javascript.html
+
+var cronometro;
+
+function carga()
+{
+    contador_s =0;
+    contador_m =0;
+    s = document.getElementById("segundos");
+    m = document.getElementById("minutos");
+    
+    cronometro = setInterval(
+            function(){
+                if(contador_s==60)
+                {
+                    contador_s=0;
+                    contador_m++;
+                    m.innerHTML = contador_m;
+
+                    if(contador_m==60)
+                    {
+                        contador_m=0;
+                    }
+                }
+        
+                if(contador_s < 10){
+                    s.innerHTML = "0" + contador_s;
+                }else{
+                    s.innerHTML = contador_s;
+                }
+                contador_s++;
+
+            }
+    ,995);
+    
+}

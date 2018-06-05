@@ -19,7 +19,7 @@ if($_POST){
         <script src="Scripts/checker.js"></script> 
          <link rel="stylesheet" type="text/css" href="Estilos/estilos.css">
     </head>
-    <body>
+	<body onload="carga()">
 <?php
 
 include 'FuncionesPHP/funciones.php';
@@ -47,56 +47,38 @@ $_SESSION['en_partido'] = true;
             <input type="hidden" name="uv" value="<?= $uv ?>" />
             <input type="hidden" name="tipo" value="<?= $tipo ?>" />
             <input type="hidden" name="ed" value="<?= $ne ?>" />
-            <table border="1">
+            <table>
                 <tr>
-                    <td>Equipo</td>
-                    <td>Usuario</td>
-                    <td>Goles</td>
-                    <td>TA</td>
-                    <td>TR</td>
-                    
-                    <?php if($tipo == "Final"){ ?>
-                    
-                    <td>Añadido</td>
-                    <td>Ganador Penaltis</td>
-                    
-                    <?php } ?>
+                    <td colspan="3" id="td_ucl_white"><?= $el ?></td>
+                    <td colspan="3" id="td_ucl_blue"><?= $tipo ?></td>
+                    <td colspan="3" id="td_ucl_white"><?= $ev ?></td>
                 </tr>
                 <tr>
-                    <td><?php getImagenEquipoNombre($conn, $el, 50, 50); echo " $el"; ?></td>
-                    <td><?php getImagenUsuario(getIDUsuario($conn, $ul), 0.3); echo " $ul"; ?></td>
-                    <td><input type="number" name="gl" min="0" value="0"></td>
-                    <td><input type="number" name="tal" min="0" value="0"></td>
-                    <td><input type="number" name="trl" min="0" max="5" value="0"></td>
-                    
-                    <?php if($tipo == "Final"){ ?>
-                    
-                    <td><input type="checkbox" name="pr" value="true">Prórroga<br>
-                    <td><input id="ganp1" type="radio" name="ganp" value="<?= getIDEquipo($conn, $el)?>">Gané en penaltis<br></td>
-                
-                    <?php } ?>
+                    <td colspan="3"><?php getImagenEquipoNombre($conn, $el);?></td>
+                    <td colspan="3"><p class="m_goles"><input type="number" name="gl" min="0" value="0" class="m_goles_uno">-<input type="number" name="gv" min="0" value="0" class="m_goles_uno"></p></td>
+                    <td colspan="3"><?php getImagenEquipoNombre($conn, $ev);?></td>
                 </tr>
-                
                 <tr>
-                    <td><?php getImagenEquipoNombre($conn, $ev, 50, 50); echo " $ev"; ?></td>
-                    <td><?php getImagenUsuario(getIDUsuario($conn, $uv), 0.3); echo " $uv"; ?></td>
-                    <td><input type="number" name="gv" min="0" value="0"></td>
-                    <td><input type="number" name="tav" min="0" value="0"></td>
-                    <td><input type="number" name="trv" min="0" max="5" value="0"></td>
-                    
-                    <?php if($tipo == "Final"){ ?>
-                    
-                    <td><input type="checkbox" name="pen" value="true">Penaltis<br>
-                    <td><input id="ganp2" type="radio" name="ganp" value="<?= getIDEquipo($conn, $ev)?>">Gané en penaltis<br>
-                        <a onclick="limpiarGanp()">Resetear ganador</a>
-                    </td>
-                    <?php } ?>
+                    <td><input type="number" name="trl" min="0" max="5" value="0" class="m_tr"></td>
+                    <td><input type="number" name="tal" min="0" value="0" class="m_ta"></td>
+                    <td><?php getImagenUsuario(getIDUsuario($conn, $ul), 0.3); ?></td>
+                    <td><p id="td_ucl_white"><?= $ul ?></p></td>
+                    <td><p id="td_ucl_blue"><span id="minutos">0</span>:<span id="segundos">00</span></p></td>
+                    <td><p id="td_ucl_white"><?= $uv ?></p></td>
+                    <td><?php getImagenUsuario(getIDUsuario($conn, $uv), 0.3);?></td>
+                    <td><input type="number" name="tav" min="0" value="0" class="m_ta"></td>
+                    <td><input type="number" name="trv" min="0" max="5" value="0" class="m_tr"></td>
                 </tr>
                 
             </table>
-        <input type="submit" value="FINAL DEL PARTIDO">
+            <input class="button buttonBlue" type="submit" value="FINAL DEL PARTIDO">
 
-    
+        
+        <?php if($tipo == "Final"){ ?>
+            <p>
+                <img src="Imagenes/Champions.png" width="241" height="327"/>
+            </p>
+        <?php } ?>
     
     </center>
     </body>

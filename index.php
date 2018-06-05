@@ -24,7 +24,7 @@ if(@$_GET['salir']=="true")
       <p>
       Ya hay una edición en curso. 
       <form action="principal.php" method="get">
-            <button type="submit">IR AL PANEL PRINCIPAL</button>
+            <button  class="button buttonBlue" type="submit">IR AL PANEL PRINCIPAL</button>
         </form>
       </p>
 <?php 
@@ -86,7 +86,7 @@ listaEquipos("Javi");
 listaEquipos("Chechu");
 ?>
     
-            <input type="submit" value="COMENZAR">
+            <input class="button buttonBlue" type="submit" value="COMENZAR">
         </form>
         
         <p>
@@ -96,13 +96,12 @@ listaEquipos("Chechu");
          <h3>Registrar Equipo</h3>
         <form action="" method="post" enctype="multipart/form-data">
             Equipo: <input type="text" name="nombre_equipo_nuevo">
-            Imagen (305x305): <input type="file" name="imagen_equipo_nuevo"/>
-         <input type="submit" value="Registrar">
+            Imagen (cuadrada): <input type="file" name="imagen_equipo_nuevo"/>
       </form>
          
          <p>
       <form action="estadisticas.php" method="get">
-            <button type="submit">VER ESTADÍSTICAS</button>
+          <button class="button buttonBlue" type="submit">VER ESTADÍSTICAS</button>
         </form>
     </p>
        

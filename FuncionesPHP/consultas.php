@@ -51,17 +51,17 @@ function getUsuarioFromID($conn, $id){
 
 function getTablaEquiposRegistrados($conn){
     if ($conn){
-        echo "<table border=\"1\">";
+        echo "<table>";
         echo "<tr><i>Equipos registrados</i></tr>";
         $query = "SELECT id, nombre FROM equipo order by nombre;";
         $result = mysqli_query($conn, $query);
         while($row = mysqli_fetch_assoc($result))
         {
-            echo "<tr><td>";
+            echo "<tr><td id=\"td_ucl_blue\">";
             //echo $row["id"];
             //echo "</td><td>";
             getImagenEquipoID($conn, $row["id"], 0.16);
-            echo "</td><td>";
+            echo "</td><td id=\"td_ucl_white\">";
             echo $row["nombre"];
             echo "</td></tr>";
         } 
@@ -124,10 +124,17 @@ function getFilaPartido($conn, $id){
         $result = mysqli_query($conn, $query);
         while($row = mysqli_fetch_assoc($result))
         {
-            echo "<tr id=\"p_tr\">";
-            echo "<td id=\"p_td\">".$row["id"]."</td>";
-            echo "<td id=\"p_td\">".$row["tipo"]."</td>";
-            echo "<td id=\"p_td\">".$row["num_ed"]."</td>";
+            $id = $row["id"];
+            $edicion = $row["edicion"];
+            $tipo = $row["tipo"];
+            $num_ed = $row["num_ed"];
+            echo "<tr>";
+            if($tipo == "Final"){
+                echo "<td id=\"td_ucl_blue\" colspan=\"7\"> Partido ".$id." - Ed. ".$edicion."ª - ".$tipo." </td>";
+            }else{
+                echo "<td id=\"td_ucl_blue\" colspan=\"7\"> Partido ".$id." - Ed. ".$edicion."ª - ".$tipo." (".$num_ed."º) </td>";
+            }
+            echo "</tr><tr>";
             
             
             $query2 = "SELECT * FROM marcador where partido = ".$row["id"]." and local = 1;";
@@ -138,24 +145,27 @@ function getFilaPartido($conn, $id){
             getImagenUsuario($fila["usuario"], 0.25);
             echo "</td>";
             echo "<td id=\"p_td\">";
-            getImagenEquipoID($conn, $fila["equipo"], 0.16);
+            getImagenEquipoID($conn, $fila["equipo"], 0.2);
             echo "</td>";
-            echo "<td id=\"p_td\">". getNombreEquipo($conn, $fila["equipo"]) ."</td>";
-            echo "<td id=\"marcador_g\">".$fila["goles"]."</td>";
+            echo "<td id=\"p_td_equipo\">". getNombreEquipo($conn, $fila["equipo"]) ."</td>";
+            
+            $gl = $fila["goles"];
             
             $query3 = "SELECT * FROM marcador where partido = ".$row["id"]." and local = 0;";
             $result3 = mysqli_query($conn, $query3);
             $fila2 = mysqli_fetch_assoc($result3);
-            echo "<td id=\"p_td\">-</td>";
-            echo "<td id=\"marcador_g\">".$fila2["goles"]."</td>";
-            echo "<td id=\"p_td\">". getNombreEquipo($conn, $fila2["equipo"]) ."</td>";
+            
+            $gv = $fila2["goles"];
+            
+            echo "<td id=\"marcador_g\">".$gl." - ".$gv."</td>";
+            echo "<td id=\"p_td_equipo\">". getNombreEquipo($conn, $fila2["equipo"]) ."</td>";
             echo "<td id=\"p_td\">";
-            getImagenEquipoID($conn, $fila2["equipo"], 0.16);
+            getImagenEquipoID($conn, $fila2["equipo"], 0.2);
             echo "</td>";
             echo "<td id=\"p_td\">";
             getImagenUsuario($fila2["usuario"], 0.25);
             echo "</td>";
-            if ($row["prorroga"]) { echo "<td>PR</td>"; } else { echo "<td>  </td>"; }
+            if ($row["prorroga"]) { echo "<td id=\"p_td\">PR</td>"; } else { echo "<td>  </td>"; }
             if ($row["penaltis"]) {
                 echo "<td id=\"p_td\">Ganó (P): ";
                 getImagenEquipoID($conn, $row["ganador_penaltis"], 0.16); 

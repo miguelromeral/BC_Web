@@ -55,11 +55,7 @@ if($_POST){
          <link rel="stylesheet" type="text/css" href="Estilos/estilos.css">
     </head>
     <body>
-        
-    <form name="fsalir" action="index.php" method="get">
-        <button type="submit" name="salir" id="salir" value="true">CERRAR SESIÓN</button>
-    </form>
-        
+    <center>
 <?php
 
 //Quitamos Warning
@@ -88,8 +84,7 @@ echo "</p>";
 
 ?>
         <p>
-    <center>
-        <table cellspacing="30">
+        <table>
             <tr>
                 <td colspan="2">
             <center><img src="Imagenes/foto_Miguel.png" width="175" height="253"/></center>
@@ -102,20 +97,20 @@ echo "</p>";
                 </td>
             </tr>
             <tr>
-                <td>
+                <td id="td_ucl_blue">
                     <?php getImagenEquipoNombre($conn, $em, 50, 50); ?>
                 </td>
-                <td id="principal_equipo"><?=$em?></td>
+                <td id="td_ucl_white"><?=$em?></td>
                 
-                <td>
+                <td id="td_ucl_blue">
                     <?php getImagenEquipoNombre($conn, $ej, 50, 50); ?>
                 </td>
                 
-                <td id="principal_equipo"><?=$ej?></td>
-                <td>
+                <td id="td_ucl_white"><?=$ej?></td>
+                <td id="td_ucl_blue">
                     <?php getImagenEquipoNombre($conn, $ec, 50, 50); ?>
                 </td>
-                <td id="principal_equipo"><?=$ec?></td>
+                <td id="td_ucl_white"><?=$ec?></td>
             </tr>
         
 
@@ -129,20 +124,19 @@ echo "</p>";
         <option value="<?= $ej ?>"><?= $ej ?></option>
         <option value="<?= $ec ?>"><?= $ec ?></option>
     </select>
-    <i> v </i> 
     <select name="visitante">
         <option value="null">Equipo VISITANTE</option>
         <option value="<?= $em ?>"><?= $em ?></option>
         <option value="<?= $ej ?>"><?= $ej ?></option>
         <option value="<?= $ec ?>"><?= $ec ?></option>
     </select>
-    <br>
+        <p>
     <select name="tipo">
         <option value="null">TIPO DE PARTIDO</option>
         <option value="Fase de Grupos">Fase de Grupos</option>
         <option value="Final">FINAL</option>
-    </select><br>
-    <input type="submit" value="EMPEZAR">
+    </select></p>
+    <input class="button buttonBlue" type="submit" value="EMPEZAR">
     
     </form>
     

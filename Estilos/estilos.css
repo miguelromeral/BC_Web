@@ -21,64 +21,69 @@
 }
 
 div {
-    font-family: F1_Bold;
+    font-family: UCL;
+    text-alig: center;
 }
 
 p {
+    font-family: UCL;
     text-align: center;
 }
 
 /* Cumple con todos los que tienen id=... */
 #marcador_g {
-    font-family: UCL;
-    font-size: 200%;
+    border-bottom: 1px solid #ddd;
     text-align: center;
-    color: darkblue;
-}
-
-#principal_equipo{
+    background-image:url(rotulo2.png);
+    background-size: cover;
+    color: #000000;
     font-family: UCL;
-    font-size: 150%;
-    color: darkblue;
+    text-align: center;
+    font-size: 40px;
 }
 
 body {
-  /* background: #6699ff;
-  background: -webkit-linear-gradient(#648880, #293f50);
-  background:    -moz-linear-gradient(#648880, #293f50); */
-  background:         linear-gradient(#f2f2f2,  #cccccc);
+  /* background:         linear-gradient(#f2f2f2,  #cccccc); */
+    background-image:url(UCL_fondo.jpg);
+    /* Full height */
+    height: 100%; 
+    color: #f2f2f2;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 
 #tabla_partidos {
-    border-collapse: collapse;
-    font-family: F1_Reg;
-    font-size: 100%;
-    width: 100%;
+    /*border-collapse: collapse;*/
+    font-family: UCL;
+    font-size: 18px;
+    /*width: 100%;*/
 }
 
 #p_td {
-    padding: 8px;
-    text-align: left;
     border-bottom: 1px solid #ddd;
     text-align: center;
-}
-
-#p_tr:hover {background-color:#f5f5f5;}
-
-
-#tabla_partidos {
-    border-collapse: collapse;
-    font-family: F1_Reg;
-    font-size: 100%;
-    width: 100%;
-}
-
-#p_td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    background-image:url(rotulo2.png);
+    background-size: cover;
+    color: #00004d;
+    font-family: UCL;
     text-align: center;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+
+#p_td_equipo {
+    text-align: center;
+    background-image:url(rotulo2.png);
+    background-size: cover;
+    color: #00004d;
+    font-family: UCL;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 18px;
+    column-width: 300px;
 }
 
 #p_tr:hover {background-color:#f5f5f5;}
@@ -89,8 +94,7 @@ body {
 #tabla_clasificacion {
     border-collapse: collapse;
     font-family: F1_Reg;
-    font-size: 100%;
-    width: 100%;
+    width: 50%;
     text-align: center;
 }
 
@@ -103,20 +107,26 @@ body {
     color: white;
 }
 #c_tr_in{
+    color: black;
     background-color: #33cc33;
 }
 #c_tr_out{
     color: black;
+    background-color: #ffb3b3;
 }
 
 #td_ucl_blue{
     background-image:url(timer.png);
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: cover;
     color: white;
     font-family: UCL;
     text-align: center;
     text-transform: uppercase;
     font-size: 18px;
+    padding:0; margin:0;
+    border-collapse: collapse;
 }
 #td_ucl_white{
     background-image:url(rotulo2.png);
@@ -126,6 +136,8 @@ body {
     text-align: center;
     text-transform: uppercase;
     font-size: 18px;
+    padding:0; margin:0;
+    border-collapse: collapse;
 }
 #td_ucl_white_bold{
     background-image:url(rotulo2.png);
@@ -135,4 +147,127 @@ body {
     text-align: center;
     text-transform: uppercase;
     font-size: 26px;
+    padding:0; margin:0;
+    border-collapse: collapse;
+}
+
+.m_ta {
+    background-color: #ffff00;
+    color: white;
+    text-align: center;
+    color: #000000;
+    font-family: UCL;
+    text-align: center;
+    font-size: 24px;
+    width: 100px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+}
+
+.m_tr {
+    background-color: #ff0000;
+    color: white;
+    text-align: center;
+    color: white;
+    font-family: UCL;
+    text-align: center;
+    font-size: 24px;
+    width: 100px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+}
+
+
+.m_goles {
+    color: white;
+    text-align: center;
+    color: white;
+    font-family: UCL;
+    text-align: center;
+    font-size: 72px;
+    height: 150px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    border: none;
+    width: 500px;
+}
+
+
+.m_goles_uno {
+    background: transparent;
+    color: white;
+    opacity: 10%;
+    text-align: center;
+    font-family: UCL;
+    font-size: 162px;
+    width: 200px;
+    height: 220px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+}
+
+select {
+    font-family: UCL;
+    width: 35%;
+    color: #00004d;
+    text-align: center;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-family: UCL;
+    color: white;
+    text-align: center;
+}
+h2 {
+    font-family: UCL;
+    color: white;
+    text-align: center;
+}
+h3 {
+    font-family: UCL;
+    color: white;
+    text-align: center;
+}
+p {
+    font-family: UCL;
+    color: white;
+    text-align: center;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-family: UCL;
+}
+
+.buttonBlue {
+    background-color: white;
+    color: #00001a;
+    border: 2px solid #555555;
+}
+
+.buttonBlue:hover {
+    background-color: #00001a;
+    color: white;
 }

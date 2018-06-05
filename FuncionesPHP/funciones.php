@@ -1,11 +1,11 @@
 <?php
 function listaEquipos ($jugador){
-    echo "<p> ".$jugador.": ";
+    echo "<p> ".$jugador.": <br>";
     $query = "SELECT nombre from equipo order by nombre;";
     global $conn;
     $result = mysqli_query($conn, $query);
     echo "<select name=\"equipo_".$jugador."\">";
-    echo "<option value=\"null\">Seleccione un equipo</option>";
+    echo "<option value=\"null\">SELECCIONE UN EQUIPO</option>";
     while($row = mysqli_fetch_assoc($result))
     {
         $equipo = $row["nombre"];
@@ -236,10 +236,23 @@ function listaOpciones ($conn){
 
 function listaTodosPartidos ($conn){
     $ned = getNumeroEdiciones($conn);
-    echo "<p>Partidos por edición:<br>";
+    
+    echo "<select onchange=\"ver_stats_partidos(this, $ned)\">";
+    echo "<option value=\"null\">Seleccione una edición</option>";
     for ($i=1; $i <= $ned; $i++){
-        echo "<h2>Edición ".$i."ª</h2>";
-        getTablaPartidosEdicion($conn, $i);
+        echo "<option value=\"".$i."\">".$i."ª</option>";
+    }
+    echo "</select>";
+    echo "</p>";
+    
+    
+    echo "<p>";
+    for ($i=1; $i <= $ned; $i++){
+        
+        echo "<div id=\"stats_partidos_$i\" style=\"display: none;\">";
+            echo "<h2>Edición ".$i."ª</h2>";
+            getTablaPartidosEdicion($conn, $i);
+        echo "</div>";
     }
     echo "</p>";
 }
@@ -385,7 +398,6 @@ function estadisticasEquipo($conn, $equipo){
     $tpg = getPENGEquipo($conn, $equipo);
     
     ?>
-<hr>
         <?php getImagenEquipoID($conn, $equipo, 0.5); ?>
 <h1><?= getNombreEquipo($conn, $equipo) ?></h1>
 <table>
