@@ -319,12 +319,12 @@ function estadisticasJugador($conn, $jugador){
         <td id="td_ucl_white"><?= getPrimeroFGUsuario($conn, $jugador) ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">Prórrogas</td>
-        <td id="td_ucl_white"><?= getPRUsuario($conn, $jugador) ?></td>
-    </tr>
-    <tr>
         <td id="td_ucl_blue">Finales</td>
         <td id="td_ucl_white"><?= getFinalesUsuario($conn, $jugador) ?></td>
+    </tr>
+    <tr>
+        <td id="td_ucl_blue">Prórrogas</td>
+        <td id="td_ucl_white"><?= getPRUsuario($conn, $jugador) ?></td>
     </tr>
     <tr>
         <td id="td_ucl_blue">T. Amarillas</td>
@@ -435,12 +435,12 @@ function estadisticasEquipo($conn, $equipo){
         <td id="td_ucl_white"><?= getPrimeroFGEquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
-        <td id="td_ucl_blue">Prórrogas</td>
-        <td id="td_ucl_white"><?= getPREquipo($conn, $equipo) ?></td>
-    </tr>
-    <tr>
         <td id="td_ucl_blue">Finales</td>
         <td id="td_ucl_white"><?= getFinalesEquipo($conn, $equipo) ?></td>
+    </tr>
+    <tr>
+        <td id="td_ucl_blue">Prórrogas</td>
+        <td id="td_ucl_white"><?= getPREquipo($conn, $equipo) ?></td>
     </tr>
     <tr>
         <td id="td_ucl_blue">T. Amarillas</td>
@@ -525,7 +525,7 @@ function estadisticasCompeticion($conn){
             <option value="stats_competicion_seleccionados">Equipos seleccionados</option>
             <option value="stats_competicion_goles_partido">Partidos con más goles</option>
             <option value="stats_competicion_goles_edicion">Ediciones con más goles</option>
-            <option value="stats_competicion_palmares_equipo_usuario">Palmarés Equio + Jugador</option>
+            <option value="stats_competicion_palmares_equipo_usuario">Palmarés Equipo + Jugador</option>
             <option value="stats_competicion_palmares">Palmarés</option>
     </select>
       

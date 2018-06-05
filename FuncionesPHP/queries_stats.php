@@ -841,11 +841,11 @@ function palmares($conn){
             <tr>
             <i>Campeones</i>
             </tr>
-            <tr id="td_ucl_blue">
-                <td colspan="2">Equipo</td>
+            <tr>
+                <td id="td_ucl_blue" colspan="2">Equipo</td>
                 
-                <td colspan="2">Usuario</td>
-                <td>Edición</td>
+                <td id="td_ucl_blue" colspan="2">Usuario</td>
+                <td id="td_ucl_blue">Edición</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
@@ -1007,14 +1007,14 @@ function goleadasPorPartido($conn){
             <tr>
             <i>Mayores goleadas en partido</i>
             </tr>
-            <tr id="td_ucl_blue">
-                <td>Goles</td>
-                <td colspan="2">Equipo</td>
+            <tr>
+                <td id="td_ucl_blue">Goles</td>
+                <td colspan="2" id="td_ucl_blue">Equipo</td>
                 
-                <td>Edición</td>
-                <td>Tipo</td>
-                <td colspan="2">Usuario</td>
-                <td>#Partido</td>
+                <td id="td_ucl_blue">Edición</td>
+                <td id="td_ucl_blue">Tipo</td>
+                <td colspan="2"  id="td_ucl_blue">Usuario</td>
+                <td id="td_ucl_blue">#Partido</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
@@ -1059,12 +1059,12 @@ function goleadasPorEdicion($conn){
             <tr>
             <i>Mayores goleadas en edición</i>
             </tr>
-            <tr id="td_ucl_blue">
-                <td>Goles</td>
-                <td colspan="2">Equipo</td>
+            <tr>
+                <td id="td_ucl_blue">Goles</td>
+                <td  id="td_ucl_blue" colspan="2">Equipo</td>
                 
-                <td colspan="2">Usuario</td>
-                <td>Edición</td>
+                <td  id="td_ucl_blue" colspan="2">Usuario</td>
+                <td id="td_ucl_blue">Edición</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){
@@ -1138,11 +1138,11 @@ function palmaresEquipoUsuario($conn){
             <tr>
             <i>Más títulos por Equipo y Usuario</i>
             </tr>
-            <tr id="td_ucl_blue">
-                <td>Títulos</td>
-                <td colspan="2">Equipo</td>
+            <tr>
+                <td id="td_ucl_blue">Títulos</td>
+                <td id="td_ucl_blue" colspan="2">Equipo</td>
                 
-                <td colspan="2">Usuario</td>
+                <td id="td_ucl_blue" colspan="2">Usuario</td>
             </tr>
     <?php
     while($row = mysqli_fetch_assoc($result)){

@@ -89,6 +89,7 @@ if (@$_SESSION['en_curso'] == true) {
         <form action="" method="post" enctype="multipart/form-data">
             Equipo: <input type="text" name="nombre_equipo_nuevo">
             Imagen (cuadrada): <input type="file" name="imagen_equipo_nuevo"/>
+            <input type="submit" value="Registrar">
         </form>
 
         <p>

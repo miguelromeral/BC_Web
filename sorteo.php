@@ -23,14 +23,15 @@ $conn = conectarse();
    <link rel="stylesheet" href="Estilos/estilos.css" type="text/css" media="screen" />
   
    
+   <!-- Fuente: https://github.com/josex2r/jQuery-SlotMachine -->
+   
     </head>
-    <body>
+    <body style="background: transparent;">
     <center>
 
  <div id="randomize">
       <div>
         <h1>¡Sorteo!</h1>
-        <h30>Fuente: https://github.com/josex2r/jQuery-SlotMachine</h30>
 
         <div class="row">
           <div class="col-sm-4">
