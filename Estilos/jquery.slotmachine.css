@@ -1,0 +1,32 @@
+/*
+ * jQuery Slot Machine v4.0.0
+ * https://github.com/josex2r/jQuery-SlotMachineundefined
+ *
+ * Copyright 2014 Jose Luis Represa
+ * Released under the MIT license
+ */
+.slotMachineNoTransition {
+    -webkit-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
+.slotMachineBlurFast {
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+}
+
+.slotMachineBlurMedium {
+    -webkit-filter: blur(3px);
+    filter: blur(3px);
+}
+
+.slotMachineBlurSlow {
+    -webkit-filter: blur(2px);
+    filter: blur(2px);
+}
+
+.slotMachineBlurTurtle {
+    -webkit-filter: blur(1px);
+    filter: blur(1px);
+}

@@ -400,7 +400,7 @@ function estadisticasEquipo($conn, $equipo){
     ?>
         <?php getImagenEquipoID($conn, $equipo, 0.5); ?>
 <h1><?= getNombreEquipo($conn, $equipo) ?></h1>
-<table>
+<table cellpadding="-1">
     <tr>
         <td id="td_ucl_blue">Campeonatos</td>
         <td id="td_ucl_white_bold" style="font-size: 46px;"><?= getCampeonatosEquipo($conn, $equipo) ?></td>
@@ -547,4 +547,16 @@ function estadisticasCompeticion($conn){
         <?php palmares($conn);?></div>
     
     <?php
+}
+
+
+function getEquiposSorteo($conn){
+    $query = "SELECT id FROM equipo;";
+    $result = mysqli_query($conn, $query);
+    while($imgData = mysqli_fetch_assoc($result)){
+        ?>
+            <div><?php getImagenEquipoID($conn, $imgData["id"], 0.33) ?></div>
+        <?php
+    }
+    mysqli_free_result($result);
 }
