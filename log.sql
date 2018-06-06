@@ -252,3 +252,16 @@ INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) V
 INSERT INTO partido (id, edicion, tipo, num_ed, prorroga, penaltis, ganador_penaltis) VALUES (49, 13, 'Final', 4, false, false, 0);
 INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (49, 13, 15, 2, 1, 3, 0, 0);
 INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (49, 13, 16, 1, 0, 4, 1, 0);
+INSERT INTO edicion (id, fecha, hora, mins) VALUES (14, '2018-06-05', 22, 49);
+INSERT INTO eleccion (edicion, usuario, equipo) VALUES (14, 1, 43);
+INSERT INTO eleccion (edicion, usuario, equipo) VALUES (14, 2, 9);
+INSERT INTO eleccion (edicion, usuario, equipo) VALUES (14, 3, 2);
+INSERT INTO partido (id, edicion, tipo, num_ed, prorroga, penaltis, ganador_penaltis) VALUES (50, 14, 'Fase de Grupos', 1, false, false, 0);
+INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (50, 14, 2, 3, 1, 0, 0, 0);
+INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (50, 14, 9, 2, 0, 1, 0, 0);
+INSERT INTO partido (id, edicion, tipo, num_ed, prorroga, penaltis, ganador_penaltis) VALUES (51, 14, 'Fase de Grupos', 2, false, false, 0);
+INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (51, 14, 43, 1, 1, 2, 0, 0);
+INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (51, 14, 2, 3, 0, 1, 0, 0);
+INSERT INTO partido (id, edicion, tipo, num_ed, prorroga, penaltis, ganador_penaltis) VALUES (52, 14, 'Final', 3, false, false, 0);
+INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (52, 14, 43, 1, 1, 4, 0, 0);
+INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES (52, 14, 9, 2, 0, 3, 3, 1);

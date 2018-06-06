@@ -1,3 +1,4 @@
+--Habría que insertarlos manualmente, ya que los bytes de las imágenes no podemos ponerla como texto.
 INSERT INTO equipo (id, nombre, imagen) VALUES ('1', 'BVB Dortmund', '??');
 INSERT INTO equipo (id, nombre, imagen) VALUES ('2', 'Chelsea FC', '??');
 INSERT INTO equipo (id, nombre, imagen) VALUES ('3', 'Real Madrid CF', '??');

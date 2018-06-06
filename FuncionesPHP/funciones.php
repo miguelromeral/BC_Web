@@ -1,6 +1,11 @@
 <?php
+ /**
+  * Crea un select en HTML para que se puedan seleccionar los equipos
+  * @param string $jugador Nombre del jugador que tendrá ese equipo.
+  */
 function listaEquipos ($jugador){
     echo "<p> ".$jugador.": <br>";
+    //Obtenemos el nombre de todos los equipos registrados en orden.
     $query = "SELECT nombre from equipo order by nombre;";
     global $conn;
     $result = mysqli_query($conn, $query);
@@ -8,6 +13,7 @@ function listaEquipos ($jugador){
     echo "<option value=\"null\">SELECCIONE UN EQUIPO</option>";
     while($row = mysqli_fetch_assoc($result))
     {
+        //Por cada equipo, creamos un option
         $equipo = $row["nombre"];
         echo "<option value=\"".$equipo."\">".$equipo."</option>";
     }
@@ -15,15 +21,24 @@ function listaEquipos ($jugador){
     echo "</p>";
 }
 
+/**
+ * Se conecta a la base de datos. Si no se puede conectar, genera el esquema de la 
+ * base de datos y vuelve a intentar la conexión. (Si MySQL está desactivado,
+ * no retornará nada).
+ * @return \mysqli Conexión con la base de datos
+ */
 function conectarse(){
-    $host = 'localhost';
-    $database = 'bc';
-    $user = 'root';
-    $password = '';
+    $host = 'localhost';    //Dirección del servidor
+    $database = 'bc';       //Base de datos
+    $user = 'root';         //Nombre de usuario del propietario
+    $password = '';         //Contraseña del usuario
+    //Generamos la conexión
     $conn = new mysqli($host,$user,$password);
     if($conn->select_db($database)){
+        //Si todo salió bien, la devolvemos.
         return $conn;
     }else{
+        //Sino, creamos el esquema y volvemos a intentarlo.
         crearEsquema($conn);
         $conn = new mysqli($host,$user,$password);
         $conn->select_db($database);
@@ -31,18 +46,31 @@ function conectarse(){
     }
 }
 
+/**
+ * Registra en la base de datos el equipo
+ * @param \mysqli $conn Conexión con la base de datos.
+ * @param string $nombre Nombre del equipo.
+ * @param string $imagen Escudo del equipo.
+ * @return boolean Registro con éxito.
+ */
 function registrarEquipos($conn, $nombre, $imagen){
+    //Comprobamos que le nombre del equipo esté entre lo permitido.
     if (strlen($nombre) <= 30 && strlen($nombre) > 0){
+        //Obtenemos el número de equipos que coinciden con ese nombre.
         $query = "SELECT count(*) as cuenta from equipo where nombre = \"".$nombre."\";";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
+        //Si no hay ningún equipo, se registrará:
         if ($row["cuenta"] == 0){
+            //Obtenemos el ID del equipo contando los existentes.
             $query = "SELECT count(*) as cuenta FROM equipo;";
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $idn = $row["cuenta"] + 1;
+            //Creamos la consulta SQL y la guardamos en el log.
             $queryInsert = "INSERT INTO equipo (id, nombre, imagen) VALUES ('".$idn."', '".$nombre."', '".$imagen."');";
             guardarEnLogEquipo("INSERT INTO equipo (id, nombre, imagen) VALUES ('".$idn."', '".$nombre."', '??');");
+            //Ejecutamos la consulta
             $resultInsert = mysqli_query($conn, $queryInsert); 
             if($resultInsert){
                return true;
@@ -57,6 +85,12 @@ function registrarEquipos($conn, $nombre, $imagen){
     }
 }
 
+/**
+ * Retorna el usuario que ha seleccionado un equipo en esta sesión.
+ * @param _SESSION  $sesion Sesión actual
+ * @param string $equipo Nombre del equipo por el que buscar
+ * @return string Nombre de usuario 
+ */
 function getUsuarioFromEquipoSesion($sesion, $equipo){
     foreach ($sesion as $n => $v)
    {
@@ -69,6 +103,12 @@ function getUsuarioFromEquipoSesion($sesion, $equipo){
    return null;
 }
 
+/**
+ * Retorna el nombre del equipo en función del ID del usuario
+ * @param _SESSION $sesion Sesión actual
+ * @param integer $id ID del usuario
+ * @return string Nombre del equipo
+ */
 function getEquipoFromUsuarioSesion($sesion, $id){
     $usuario = getUsuarioFromID($conn, $id);
     foreach ($sesion as $n => $v)
@@ -80,19 +120,43 @@ function getEquipoFromUsuarioSesion($sesion, $id){
    return null;
 }
 
+/**
+ * Registra en la BD un partido creando consultas MySQL
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $ed Número de edición
+ * @param string $tipo Tipo de partido
+ * @param integer $ul ID usuario local
+ * @param integer $uv ID usuario visitante
+ * @param integer $el ID equipo local
+ * @param integer $ev ID equipo visitante
+ * @param integer $gl Goles local
+ * @param integer $gv Goles visitante
+ * @param integer $tal TA local
+ * @param integer $tav TA visitante
+ * @param integer $trl TR local
+ * @param integer $trv TR visitante
+ * @param boolean $pr Prórroga
+ * @param boolean $pen Penaltis
+ * @param integer $ganp ID equipo ganador de penaltis
+ * @return boolean Operacion realizada
+ */
 function registrarPartido($conn, $ed, $tipo, $ul, $uv, $el, $ev, $gl, $gv, $tal, $tav, $trl, $trv, $pr, $pen, $ganp){
     $query = "SELECT count(*) as cuenta from partido;";
     $result = mysqli_query($conn, $query);
+    //Número de partido en total
     $idp = mysqli_fetch_assoc($result)["cuenta"] + 1;
     
     $query = "SELECT count(*) as cuenta from partido where edicion = $ed;";
     $result = mysqli_query($conn, $query);
+    //Número d epartido en esta edición
     $num_ed = mysqli_fetch_assoc($result)["cuenta"] + 1;
     
+    //Insertamos el partido y guardamos en log
     $queryInsert = "INSERT INTO partido (id, edicion, tipo, num_ed, prorroga, penaltis, ganador_penaltis) VALUES "
             . "($idp, $ed, '$tipo', $num_ed, $pr, $pen, $ganp);";
     guardarEnLog($queryInsert);
     mysqli_query($conn, $queryInsert);
+    //Insertamos los marcadores y guardamos en log
     $queryInsert = "INSERT INTO marcador (partido, edicion, equipo, usuario, local, goles, ta, tr) VALUES "
             . "($idp, $ed, $el, $ul, 1, $gl, $tal, $trl);";
     guardarEnLog($queryInsert);
@@ -101,11 +165,15 @@ function registrarPartido($conn, $ed, $tipo, $ul, $uv, $el, $ev, $gl, $gv, $tal,
             . "($idp, $ed, $ev, $uv, 0, $gv, $tav, $trv);";
     guardarEnLog($queryInsert);
     mysqli_query($conn, $queryInsert);
-    
     return true;
 }
 
-function registrarUsuarios($conn){
+/**
+ * Registra los usuarios por defecto (Miguel, Javi, Chechu).
+ * @param \mysqli $conn Conexión con la base de datos.
+ * @return boolean Registro exitoso.
+ */
+function registrarUsuarios($conn){ 
     $queryInsert = "INSERT INTO usuario (id, nombre) VALUES (1, 'Miguel');";
     if (mysqli_query($conn, $queryInsert)){
         guardarEnLog($queryInsert);
@@ -121,6 +189,15 @@ function registrarUsuarios($conn){
     return true;
 }
 
+/**
+ * Registra la edición con la fecha actual y la elección de los jugadores.
+ * @param \mysqli $conn Conexión con la BD.
+ * @param integer $edicion Número de edición
+ * @param string $em Nombre del equipo seleccionado por Miguel.
+ * @param string $ej Nombre del equipo seleccionado por Javi.
+ * @param string $ec Nombre del equipo seleccionado por Chechu.
+ * @return boolean Inserción exitosa
+ */
 function registrarEdicion($conn, $edicion, $em, $ej, $ec){
     $fecha = date("Y-m-d");
     $hora = date("H");
@@ -140,16 +217,26 @@ function registrarEdicion($conn, $edicion, $em, $ej, $ec){
     return true;
 }
 
+/**
+ * Añade al fichero de log las consultas que se le pasan.
+ * @param string $query Consulta a guardar.
+ */
 function guardarEnLog($query){
-    //$myfile = fopen('log.txt', 'w') or die("Can't create file");
     $myfile = file_put_contents('log.sql', $query.PHP_EOL , FILE_APPEND | LOCK_EX);
-    //fclose($myfile);
 }
 
+/**
+ * Añade al fichero de registro de equipos la consulta con la que se registro.
+ * @param string $query Consulta para guardar un equipo
+ */
 function guardarEnLogEquipo($query){
     $myfile = file_put_contents('insertEquipos.sql', $query.PHP_EOL , FILE_APPEND | LOCK_EX);
 }
 
+/**
+ * Crea el esquema en la base de datos (que debe estar vacía).
+ * @param \mysqli $conn Conexión con la BD.
+ */
 function crearEsquema($conn){
     echo "Creo el esquema <br>";
     $query = "create database bc;";
@@ -218,8 +305,13 @@ function crearEsquema($conn){
 );";
     guardarEnLog($query);
     $result = mysqli_query($conn, $query);
+    //Por el momento, no se generan las restricciones porque está en pruebas.
 }
 
+/**
+ * Lista las opciones en select de HTML con las estadísticas.
+ * @param \mysqli $conn Conexión con la BD.
+ */
 function listaOpciones ($conn){
     ?>
     <select name="select_stats" onchange="ver_stats(this)">
@@ -234,9 +326,15 @@ function listaOpciones ($conn){
     <?php
 }
 
+/**
+ * Lista todos los partidos en función de la edición
+ * @param \mysqli $conn Conexión con la BD.
+ */
 function listaTodosPartidos ($conn){
     $ned = getNumeroEdiciones($conn);
     
+    //Creamos select para que se pueda seleccionar por edición, en lugar de
+    //mostrar todos de golpe.
     echo "<select onchange=\"ver_stats_partidos(this, $ned)\">";
     echo "<option value=\"null\">Seleccione una edición</option>";
     for ($i=1; $i <= $ned; $i++){
@@ -251,15 +349,21 @@ function listaTodosPartidos ($conn){
         
         echo "<div id=\"stats_partidos_$i\" style=\"display: none;\">";
             echo "<h2>Edición ".$i."ª</h2>";
+            //Mostramos en cada div los partidos de cada edición
             getTablaPartidosEdicion($conn, $i);
         echo "</div>";
     }
     echo "</p>";
 }
 
+/**
+ * Genera todas las clasificaciones en HTML separadas por edición.
+ * @param \mysqli $conn Conexión con la BD.
+ */
 function listaTodasClasificaciones($conn){
     $ned = getNumeroEdiciones($conn);
     for ($i = 1; $i <= $ned; $i++){
+            //Por cada edición, se genera un div para cambiar en función de la edición.
         ?>
             <div id="stats_clasificaciones_<?= $i ?>" style="display: none;">
                 Edición <?= $i ?>ª<br>
@@ -269,21 +373,26 @@ function listaTodasClasificaciones($conn){
     }
 }
 
+/**
+ * Muestra las estadísticas generales de un jugador.
+ * @param \mysqli $conn Conexión con la BD.
+ * @param integer $jugador ID del jugador
+ */
 function estadisticasJugador($conn, $jugador){
-    $pj = getPJUsuario($conn, $jugador);
-    $ta = getTAUsuario($conn, $jugador);
-    $tr = getTRUsuario($conn, $jugador); 
-    $pg = getPGUsuario($conn, $jugador);
-    $pe = getPEUsuario($conn, $jugador);
-    $pp = getPPUsuario($conn, $jugador);
-    $gf = getGFUsuario($conn, $jugador);
-    $gc = getGCUsuario($conn, $jugador);;
-    $pts = $pg * 3 + $pe;
-    $dg = $gf - $gc;
-    $tpg = getPENGUsuario($conn, $jugador);
+    $pj = getPJUsuario($conn, $jugador);    //Partidos jugados
+    $ta = getTAUsuario($conn, $jugador);    //Tarjetas amarillas
+    $tr = getTRUsuario($conn, $jugador);    //Tarjetas rojas
+    $pg = getPGUsuario($conn, $jugador);    //Victorias
+    $pe = getPEUsuario($conn, $jugador);    //Empates
+    $pp = getPPUsuario($conn, $jugador);    //Derrotas
+    $gf = getGFUsuario($conn, $jugador);    //Goles a favor
+    $gc = getGCUsuario($conn, $jugador);    //Goles en contra
+    $pts = $pg * 3 + $pe;                   //PTS totales (incluidas finales)
+    $dg = $gf - $gc;                        //Diferencia de goles
+    $tpg = getPENGUsuario($conn, $jugador); //Tandas de penaltis ganadas
     
     ?>
-<h1><?= getUsuarioFromID($conn, $jugador) ?></h1>
+<h1><!-- Nombre del usuario --><?= getUsuarioFromID($conn, $jugador) ?></h1>
 <table>
     <tr>
         <td id="td_ucl_blue">Títulos</td>
@@ -370,32 +479,42 @@ function estadisticasJugador($conn, $jugador){
     <?php
 }
 
+/**
+ * Muestra todas las estadísticas de un usuairo
+ * @param \mysqli $conn Conexión con la BD.
+ * @param integer $usuario ID del usuario
+ */
 function estadisticasUsuario($conn, $usuario){
+    //Panel por cada usuario
     echo "<div id=\"stats_jugadores_$usuario\" style=\"display: none;\">";
-    //echo "<div id=\"stats_jugadores_$usuario\">";
-    
+    //Cogemos imagen de usuario
     getImagenUsuario($usuario, 1.5);
     ?>
         <p><?php estadisticasJugador($conn, $usuario); ?></p>
         <p><?php equiposSeleccionadosUsuario($conn, $usuario); ?></p>
-        <p><?php //finalesUsuario($conn, $usuario); ?></p>
+        <p><?php finalesUsuario($conn, $usuario); ?></p>
         <p><?php golesEncajadosUsuarioEdicion($conn, $usuario); ?></p>
     <?php
     echo "</div>";
 }
 
+/**
+ * Estadísticas generales de un equipo
+ * @param \mysqli $conn Conexión con BD.
+ * @param integer $equipo ID del equipo
+ */
 function estadisticasEquipo($conn, $equipo){
-    $pj = getPJEquipo($conn, $equipo);
-    $ta = getTAEquipo($conn, $equipo);
-    $tr = getTREquipo($conn, $equipo); 
-    $pg = getPGEquipo($conn, $equipo);
-    $pe = getPEEquipo($conn, $equipo);
-    $pp = getPPEquipo($conn, $equipo);
-    $gf = getGFEquipo($conn, $equipo);
-    $gc = getGCEquipo($conn, $equipo);
-    $pts = $pg * 3 + $pe;
-    $dg = $gf - $gc;
-    $tpg = getPENGEquipo($conn, $equipo);
+    $pj = getPJEquipo($conn, $equipo);  //Partidos jugados
+    $ta = getTAEquipo($conn, $equipo);  //Tarjetas amarillas
+    $tr = getTREquipo($conn, $equipo);  //Tarjetas rojas
+    $pg = getPGEquipo($conn, $equipo);  //Victorias
+    $pe = getPEEquipo($conn, $equipo);  //Empates
+    $pp = getPPEquipo($conn, $equipo);  //Derrotas
+    $gf = getGFEquipo($conn, $equipo);  //Goles a favor
+    $gc = getGCEquipo($conn, $equipo);  //Goles en contra
+    $pts = $pg * 3 + $pe;               //Puntos totales
+    $dg = $gf - $gc;                    //Diferencia de goles
+    $tpg = getPENGEquipo($conn, $equipo);   //Tandas de penaltis ganadas
     
     ?>
         <?php getImagenEquipoID($conn, $equipo, 0.5); ?>
@@ -486,12 +605,15 @@ function estadisticasEquipo($conn, $equipo){
     <?php
 }
 
-
+/**
+ * Muestra las estadísticas de todos los equipos (separadas por div)
+ * @param \mysqli $conn Conexión con BD.
+ */
 function estadisticasEquiposTotal($conn){
     $query = "select id,nombre from equipo order by nombre asc;";
     $result = mysqli_query($conn, $query);
     
-    
+    //Creamos un select con todos los equipos (para mostrar solo estadísticas de uno.
     echo "<select onchange=\"ver_stats_equipos(this, ". mysqli_num_rows($result).")\">";
     echo "<option value=\"null\">Seleccione un equipo</option>";
     while($row = mysqli_fetch_assoc($result))
@@ -500,11 +622,12 @@ function estadisticasEquiposTotal($conn){
     }
     echo "</select>";
     
+    //Realizamos de nuevo la consulta
     $result = mysqli_query($conn, $query);
     
+    //Por cada equipo, genera un panel con las estadísticas.
     while($row = mysqli_fetch_assoc($result)){
         $equipo = $row["id"];
-        //$equipo = 3;
         
         echo "<div id=\"stats_equipos_$equipo\" style=\"display: none;\">";
         
@@ -517,7 +640,12 @@ function estadisticasEquiposTotal($conn){
     }
 }
 
+/**
+ * Muestra todas las estadísticas de la competición
+ * @param \mysqli $conn Conexión con la BD.
+ */
 function estadisticasCompeticion($conn){
+        //Creamos un select con todas las opciones
     ?>
         <select onchange="ver_stats_competicion(this)">
             <option value="null">Seleccione una tabla</option>
@@ -528,7 +656,6 @@ function estadisticasCompeticion($conn){
             <option value="stats_competicion_palmares_equipo_usuario">Palmarés Equipo + Jugador</option>
             <option value="stats_competicion_palmares">Palmarés</option>
     </select>
-      
         <div id="stats_competicion_fechas" style="display: none;">
             <?php fechasEdiciones($conn);?></div>
     <div id="nanai" style="display: none;">
@@ -549,11 +676,15 @@ function estadisticasCompeticion($conn){
     <?php
 }
 
-
+/**
+ * Devuelve todos los escudos de los equipos para la página del sorteo.
+ * @param \mysqli $conn Conexión con la BD.
+ */
 function getEquiposSorteo($conn){
     $query = "SELECT id FROM equipo;";
     $result = mysqli_query($conn, $query);
     while($imgData = mysqli_fetch_assoc($result)){
+            //Tamaño adaptado para que se vea correctamente.
         ?>
             <div><?php getImagenEquipoID($conn, $imgData["id"], 0.33) ?></div>
         <?php

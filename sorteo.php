@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <?php
-
+//Cogemos los valores de la sesión
 session_start();
 
+//Recogemos las funciones
 include 'FuncionesPHP/funciones.php';
 include 'FuncionesPHP/consultas.php';
 
-
-//error_reporting(E_ERROR | E_PARSE);
-
+//Nos conectamos a la BD
 $conn = conectarse();
 
 ?>
@@ -26,9 +25,11 @@ $conn = conectarse();
    <!-- Fuente: https://github.com/josex2r/jQuery-SlotMachine -->
    
     </head>
+    <!-- Eliminamos el fondo de nuestra hoja de estilos -->
     <body style="background: transparent;">
     <center>
 
+        <!-- Panel con el sorteo -->
  <div id="randomize">
       <div>
         <h1>¡Sorteo!</h1>
@@ -37,6 +38,7 @@ $conn = conectarse();
           <div class="col-sm-4">
             <div>
               <div id="machine1" class="randomizeMachine">
+                  <!-- Cogemos todos los valores de cada equipo registrado -->
                   <?php getEquiposSorteo($conn); ?>
               </div>
             </div>
@@ -46,6 +48,7 @@ $conn = conectarse();
           <div class="col-sm-4">
             <div>
               <div id="machine2" class="randomizeMachine">
+                  <!-- Cogemos todos los valores de cada equipo registrado -->
                   <?php getEquiposSorteo($conn); ?>
               </div>
             </div>
@@ -55,6 +58,7 @@ $conn = conectarse();
           <div class="col-sm-4">
             <div>
               <div id="machine3" class="randomizeMachine">
+                  <!-- Cogemos todos los valores de cada equipo registrado -->
                   <?php getEquiposSorteo($conn); ?>
               </div>
             </div>
@@ -73,6 +77,7 @@ $conn = conectarse();
       </div>
     </div>
     <script id="codeScript2">
+        //Script que realiza el sorteo:
 const btn = document.querySelector('#randomizeButton');
 const results = {
   machine1: document.querySelector('#machine1Result'),
@@ -88,7 +93,6 @@ const machine3 = new SlotMachine(el3, { active: 2 });
 
 function onComplete(active){
     ind = this.active;
-  //results[this.element.id].innerText = ind;
 }
 
 btn.addEventListener('click', () => {

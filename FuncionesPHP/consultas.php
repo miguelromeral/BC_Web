@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Número de ediciones disputadas
+ * @param \mysqli $conn Conexión con la BD
+ * @return integer Número de ediciones dispoutadas
+ */
 function getNumeroEdiciones($conn){
     if ($conn){
         $query = "SELECT count(*) as cuenta FROM bc.edicion;";
@@ -10,7 +14,12 @@ function getNumeroEdiciones($conn){
         return -1;
     }
 }
-
+/**
+ * Muestra el escudo de un equipo
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $id ID del equipo
+ * @param float $pc Porcentaje de escala la imagen
+ */
 function getImagenEquipoID($conn, $id = null, $pc = 1){
     $query = null;
     if($id){
@@ -28,7 +37,13 @@ function getImagenEquipoID($conn, $id = null, $pc = 1){
         mysqli_free_result($result); 
     }
 }
-
+/**
+ * Muestra la imagen de un equipo por nombre
+ * @param \mysqli $conn Conexión con la BD
+ * @param string $nombre Nombre del equipo
+ * @param integer $w Ancho
+ * @param integer $h Alto
+ */
 function getImagenEquipoNombre($conn, $nombre, $w = 305, $h = 305){
     $query = "SELECT imagen FROM equipo WHERE nombre = '$nombre';";
     $result = mysqli_query($conn, $query);
@@ -39,7 +54,12 @@ function getImagenEquipoNombre($conn, $nombre, $w = 305, $h = 305){
     }
 }
 
-
+/**
+ * Devuelve el nombre de usuario dado su ID
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $id ID del usuario
+ * @return string Nombre del usuario
+ */
 function getUsuarioFromID($conn, $id){
     $query = "SELECT nombre FROM usuario WHERE id= $id;";
     $result = mysqli_query($conn, $query);
@@ -49,6 +69,11 @@ function getUsuarioFromID($conn, $id){
     }
 }
 
+/**
+ * Muestra en una tabla la lista de equipos registrados
+ * @param \mysqli $conn Conexión con la BD
+ * @return string
+ */
 function getTablaEquiposRegistrados($conn){
     if ($conn){
         echo "<table>";
@@ -71,7 +96,11 @@ function getTablaEquiposRegistrados($conn){
         return "";
     }
 }
-
+/**
+ * Muestra la imagen del usuario dado su ID
+ * @param integer $id ID del usuario
+ * @param float $pc porcentaje de escala
+ */
 function getImagenUsuario($id, $pc = 1){
     $w = 175 * $pc;
     $h = 253 * $pc;
@@ -84,31 +113,19 @@ function getImagenUsuario($id, $pc = 1){
     }
     echo "<img src=\"Imagenes/foto_$nombre.png\" width=\"$w\" height=\"$h\"/>";
 }
-
+/**
+ * Muestra en una tabla los partidos disputados en esa edición
+ * @param \mysqli $conn Conexión con laB BD.
+ * @param integer $edicion Edición
+ * @return string
+ */
 function getTablaPartidosEdicion($conn, $edicion){
     if ($conn){
         echo "<table id=\"tabla_partidos\">";
         $query = "SELECT * FROM partido where edicion = $edicion;";
         $result = mysqli_query($conn, $query);
-        // IDP, Tipo, #Num_ED, el, gl, gv, ev, PR, PEN, Ganador, Penaltis
-        //id, tipo, num_ed, - , prorroga, penaltis, ganador_penaltis
-        /*echo "<tr>";
-        echo "<td>#Partido</td>";
-        echo "<td>Tipo</td>";
-        echo "<td>#Partido Ed.</td>";
-        echo "<td>Local (S)</td>";
-        echo "<td>Local</td>";
-        echo "<td>GL</td>";
-        echo "<td>GV</td>";
-        echo "<td>Visitante</td>";
-        echo "<td>Visitante (S)</td>";
-        echo "<td>Prórroga</td>";
-        echo "<td>Penaltis</td>";
-        echo "<td>Ganador (Penaltis)</td></tr>";*/
         while($row = mysqli_fetch_assoc($result))
         {
-            
-            
             getFilaPartido($conn, $row["id"]);
         } 
         echo "</table>";
@@ -117,7 +134,11 @@ function getTablaPartidosEdicion($conn, $edicion){
         return "";
     }
 }
-
+/**
+ * Devuelve una fila con la información del partido
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $id ID del partido
+ */
 function getFilaPartido($conn, $id){
     if ($conn){
         $query = "SELECT * FROM partido where id = $id;";
@@ -170,15 +191,18 @@ function getFilaPartido($conn, $id){
                 echo "<td id=\"p_td\">Ganó (P): ";
                 getImagenEquipoID($conn, $row["ganador_penaltis"], 0.16); 
                 echo "</td>";
-            }/*else{
-                echo "<td style=\" opacity: 0.0; \">---------------------------------</td>";
-            }*/
+            }
             echo "</tr>";
         } 
         mysqli_free_result($result); 
     }
 }
-
+/**
+ * Obtiene el ID de un equipo dado su nombre
+ * @param \mysqli $conn Conexión con la BD.
+ * @param string $equipo Nombre del equipo
+ * @return integer ID del equipo
+ */
 function getIDEquipo($conn, $equipo){
     $query = "SELECT id FROM equipo WHERE nombre = '$equipo';";
     $result = mysqli_query($conn, $query);
@@ -189,7 +213,11 @@ function getIDEquipo($conn, $equipo){
     return -1;
 }
 
-
+/**
+ * Devuelve el número de equipos registrados
+ * @param \mysqli $conn Conexión con la BD
+ * @return integer Nñumero de equipos registrados
+ */
 function getNumeroEquipos($conn){
     $query = "SELECT count(id) as cuenta FROM equipo;";
     $result = mysqli_query($conn, $query);
@@ -199,7 +227,12 @@ function getNumeroEquipos($conn){
     }
     return "";
 }
-
+/**
+ * Devuelve le nombre del equipo dado su ID
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $id ID del equipo
+ * @return string Nombre del equipo
+ */
 function getNombreEquipo($conn, $id){
     $query = "SELECT nombre FROM equipo WHERE id = $id;";
     $result = mysqli_query($conn, $query);
@@ -209,7 +242,12 @@ function getNombreEquipo($conn, $id){
     }
     return "";
 }
-
+/**
+ * Obtiene el ID del usuario dado su nombre
+ * @param \mysqli $conn Conexión con la BD
+ * @param string $usuario Nombre de usuario
+ * @return integer ID del usuario
+ */
 function getIDUsuario($conn, $usuario){
     $query = "SELECT id FROM usuario WHERE nombre = '$usuario';";
     $result = mysqli_query($conn, $query);
@@ -219,7 +257,14 @@ function getIDUsuario($conn, $usuario){
     }
     return -1;
 }
-
+/**
+ * Añade los datos dado un partido entre dos filas de clasificación tras un partido
+ * @param array $jug Clasificación
+ * @param type $yo Equipo al que se le añaden los valores
+ * @param type $rival Equipo rival
+ * @param type $i Posición de "yo" en la tabla
+ * @return array Clasificación con los datos añadidos
+ */
 function anadirDatosMarcador($jug, $yo, $rival, $i){
     $gf = $yo["goles"];
     $gc = $rival["goles"];
@@ -240,7 +285,13 @@ function anadirDatosMarcador($jug, $yo, $rival, $i){
     return $jug;
 }
 
-
+/**
+ * Intercambia dos filas en la clasificación
+ * @param array $cl Clasificación
+ * @param array $i Fila 1
+ * @param array $j Fila 2
+ * @return array Clasificación con ese intercambio
+ */
 function cambiarFilas($cl, $i, $j){
     $aux = $cl[$i];
     $cl[$i] = $cl[$j];
@@ -248,6 +299,13 @@ function cambiarFilas($cl, $i, $j){
     return $cl;
 }
 
+/**
+ * Ordena dos filas de la clasificación
+ * @param array $cl Clasificación total
+ * @param array $p Equipo superior en la tabla
+ * @param array $s Equipo inferior en la tabla
+ * @return array Clasificación con cambio de posición si fuera necesario
+ */
 function ordenarDosFilasClasificacion($cl, $p, $s){
     $cambio = false;
     $prim = $cl[$p];
@@ -278,6 +336,11 @@ function ordenarDosFilasClasificacion($cl, $p, $s){
     return $cl;
 }
 
+/**
+ * Ordena la clasificación en función de unos determinados criterios
+ * @param array $cl Clasificación
+ * @return array Clasificación ordenada
+ */
 function ordenarClasificacion($cl){
     $cl = ordenarDosFilasClasificacion($cl, 0, 1);
     $cl = ordenarDosFilasClasificacion($cl, 1, 2);
@@ -285,7 +348,12 @@ function ordenarClasificacion($cl){
     $cl = ordenarDosFilasClasificacion($cl, 1, 2);
     return $cl;
 }
-
+/**
+ * Retorna un array con la clasificación ordenada de una edición
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $edicion Edición
+ * @return array Clasificación de la edición
+ */
 function getClasificacion($conn, $edicion){
     // PTS[0], V[1], E[2], D[3], GF[4], GC[5], DG[6], TA[7], TR[8], Usuario[9], PJ[10], Equipo[11]
     //$m = [0,0,0,0,0,0,0,1];
@@ -322,6 +390,12 @@ function getClasificacion($conn, $edicion){
     //return $jug;
 }
 
+/**
+ * Muestra en una tabla la clasificación
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $edicion Edición
+ * @return string 
+ */
 function printClasificacion($conn, $edicion){
     if($conn){
         $cl = getClasificacion($conn, $edicion);
@@ -372,7 +446,13 @@ function printClasificacion($conn, $edicion){
         return "";
     }
 }
-
+/**
+ * Devuelve el nombre del equipo usado por un usuario en una edición.
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @param integer $edicion Edición
+ * @return string Nombre del equipo
+ */
 function getEquipoPorUsuarioEdicion($conn, $usuario, $edicion){
     $query = "select nombre from bc.equipo as e inner join ( select equipo from bc.eleccion where edicion = $edicion and usuario = $usuario ) as n on n.equipo = e.id;";
     $result = mysqli_query($conn, $query);

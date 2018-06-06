@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Obtiene los títulos de un usuario en función de su ID
+ * @param \mysqli $conn Conexión con la BD.
+ * @param integer $usuario ID del usuario
+ * @return integer Títulos del usuario
+ */
 function getCampeonatosUsuario($conn, $usuario){
     $query = "select count(a.partido) as BC_ganadas, a.nombre
 from (
@@ -43,6 +48,12 @@ order by BC_ganadas desc;";
     return $row["BC_ganadas"];
 }
 
+/**
+ * Partidos jugados por un usuario.
+ * @param \mysqli $conn Conexión con la BD.
+ * @param integer $usuario ID del usuario
+ * @return integer Partidos jugados
+ */
 function getPJUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(m.partido) as cuenta
@@ -54,7 +65,12 @@ where u.nombre = '".$nombre."';";
     $row = mysqli_fetch_assoc($result);
     return $row["cuenta"];
 }
-
+/**
+ * Equipos seleccionados por usuario
+ * @param \mysqli $conn Conexión con la BD.
+ * @param integer $usuario ID del usuario
+ * @return integer Equipos seleccionados por usuario
+ */
 function getNumeroEquiposUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(e.nombre) as cuenta
@@ -73,6 +89,12 @@ on e.id = n.equipo;";
     return $row["cuenta"];
 }
 
+/**
+ * Tarjetas amarillas de un usuario
+ * @param \mysqli $conn Conexión con la BD.
+ * @param integer $usuario ID del usuario
+ * @return integer Tarjetas amarillas de un usuario
+ */
 function getTAUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select sum(m.ta) as ta
@@ -85,6 +107,12 @@ where u.nombre = '".$nombre."'";
     return $row["ta"];
 }
 
+/**
+ * Tarjetas rojas de un usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Tarjetas rojas de un usuario
+ */
 function getTRUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select sum(m.tr) as tr
@@ -97,6 +125,12 @@ where u.nombre = '".$nombre."'";
     return $row["tr"];
 }
 
+/**
+ * Tandas de penaltis de un usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Tandas de penaltis jugadas de un usuario
+ */
 function getTPUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(m.partido) as tandas
@@ -116,6 +150,12 @@ where u.nombre = '".$nombre."'";
     return $row["tandas"];
 }
 
+/**
+ * Prórrogas jugadas de un usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID usuario
+ * @return integer Prórrogas jugadas de un usuario
+ */
 function getPRUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(m.partido) as pr
@@ -135,6 +175,12 @@ where u.nombre = '".$nombre."'";
     return $row["pr"];
 }
 
+/**
+ * Goles totales marcados por un usuario
+ * @param \mysqli $conn Conexión con BD
+ * @param integer $usuario ID usuario
+ * @return integer Goles totales marcados
+ */
 function getGFUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select sum(m.goles) as count
@@ -146,6 +192,13 @@ where u.nombre = '".$nombre."'";
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
+
+/**
+ * Goles encajados a un usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Goles encajados
+ */
 function getGCUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select sum(b.goles) as count
@@ -168,6 +221,13 @@ on a.partido = b.partido;";
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
+
+/**
+ * Victorias de un usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Victorias
+ */
 function getPGUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(a.partido) as count  
@@ -205,8 +265,12 @@ function getPGUsuario($conn, $usuario){
     return $row["count"];
 }
 
-
-
+/**
+ * Empates de un usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Empates
+ */
 function getPEUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(a.partido) as count  
@@ -244,8 +308,12 @@ function getPEUsuario($conn, $usuario){
     return $row["count"];
 }
 
-
-
+/**
+ * Derrotas de un usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Derrotas
+ */
 function getPPUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(a.partido) as count  
@@ -283,6 +351,12 @@ function getPPUsuario($conn, $usuario){
     return $row["count"];
 }
 
+/**
+ * Veces en las que ha sido primero en una fase de grupos
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return Veces en las que ha sido primero
+ */
 function getPrimeroFGUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(m.id) as count       
@@ -301,6 +375,12 @@ function getPrimeroFGUsuario($conn, $usuario){
     return $row["count"];
 }
 
+/**
+ * Tandas de penaltis ganadas por usuario
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Tandas de penaltis gandas
+ */
 function getPENGUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(p.id)     as count     
@@ -319,6 +399,13 @@ function getPENGUsuario($conn, $usuario){
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
+
+/**
+ * Indica la fecha en la que el usuario gano la última edición
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return string Fecha en que ganó la última 
+ */
 function getUltimaUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select a.partido, a.fecha          
@@ -370,6 +457,12 @@ function getUltimaUsuario($conn, $usuario){
     return $row["fecha"];
 }
 
+/**
+ * Fecha del último título que ganó un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return string Fecha de la última copa
+ */
 function getUltimaEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select a.partido, a.fecha          
@@ -421,7 +514,12 @@ function getUltimaEquipo($conn, $equipo){
     return $row["fecha"];
 }
 
-
+/**
+ * Finales que ha jugado un usuario
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ * @return integer Finales jugadas
+ */
 function getFinalesUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select count(m.partido) as count  
@@ -441,6 +539,12 @@ function getFinalesUsuario($conn, $usuario){
     return $row["count"];
 }
 
+/**
+ * Títulos de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Títulos de un equipo
+ */
 function getCampeonatosEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(a.partido)      as count    
@@ -489,6 +593,12 @@ function getCampeonatosEquipo($conn, $equipo){
     return $row["count"];
 }
 
+/**
+ * Partidos jugados de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Partidos jugados
+ */
 function getPJEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(m.partido) as count
@@ -501,6 +611,12 @@ where u.nombre = '".$nombre."';";
     return $row["count"];
 }
 
+/**
+ * Número de usuarios que se han cogido este equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Usuarios que lo han seleccionado
+ */
 function getNumeroEntrenadoresEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(u.nombre) as count       
@@ -526,6 +642,12 @@ function getNumeroEntrenadoresEquipo($conn, $equipo){
     }
 }
 
+/**
+ * Tarjetas amarillas de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Tarjetas amarillas
+ */
 function getTAEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select sum(m.ta) as ta          
@@ -538,6 +660,12 @@ where u.nombre = '".$nombre."';";
     return $row["ta"];
 }
 
+/**
+ * Tarjetas rojas de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Tarjetas rojas de un equipo
+ */
 function getTREquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select sum(m.tr) as tr          
@@ -550,6 +678,12 @@ where u.nombre = '".$nombre."';";
     return $row["tr"];
 }
 
+/**
+ * Tandas de penaltis jugadas de un equipop
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Tandas de penaltis jugadas
+ */
 function getTPEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(m.partido) as tandas
@@ -569,6 +703,12 @@ where u.nombre = '".$nombre."'";
     return $row["tandas"];
 }
 
+/**
+ * Goles marcados por un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Goles a favor
+ */
 function getGFEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select sum(m.goles) as count          
@@ -580,6 +720,12 @@ function getGFEquipo($conn, $equipo){
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
+/**
+ * Goles encajados de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Goles en cnotra
+ */
 function getGCEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select sum(b.goles) as count          
@@ -602,6 +748,12 @@ function getGCEquipo($conn, $equipo){
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
+/**
+ * Victorias de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Victorias
+ */
 function getPGEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(a.partido) as count  
@@ -639,7 +791,12 @@ function getPGEquipo($conn, $equipo){
     return $row["count"];
 }
 
-
+/**
+ * Empates de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Empates
+ */
 function getPEEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(a.partido) as count  
@@ -677,8 +834,12 @@ function getPEEquipo($conn, $equipo){
     return $row["count"];
 }
 
-
-
+/**
+ * Derrotas de un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Derrotas
+ */
 function getPPEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(a.partido) as count  
@@ -715,7 +876,12 @@ function getPPEquipo($conn, $equipo){
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
-
+/**
+ * Veces que un equipo ha quedado primero en fase de grupos
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Veces que el equipo ha sido primero en Fase de Grupos
+ */
 function getPrimeroFGEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(m.id) as count       
@@ -733,7 +899,12 @@ function getPrimeroFGEquipo($conn, $equipo){
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
-
+/**
+ * Tandas de penaltis ganadas por un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Tandas de penaltis ganadas
+ */
 function getPENGEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(p.id)     as count     
@@ -752,7 +923,12 @@ function getPENGEquipo($conn, $equipo){
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
-
+/**
+ * Finales disputadas por un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Finales jugadas
+ */
 function getFinalesEquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(m.partido) as count  
@@ -771,7 +947,12 @@ function getFinalesEquipo($conn, $equipo){
     $row = mysqli_fetch_assoc($result);
     return $row["count"];
 }
-
+/**
+ * Prórrogas jugadas por un equipo
+ * @param \mysql $conn Conexión con la BD
+ * @param integer $equipo ID del equipo
+ * @return integer Prórrogas jugadas de un equipo
+ */
 function getPREquipo($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select count(m.partido) as pr
@@ -791,7 +972,10 @@ where u.nombre = '".$nombre."'";
     return $row["pr"];
 }
 
-
+/**
+ * Muestra todos los usuarios y equipos campeones
+ * @param \mysqli $conn Conexión con la BD
+ */
 function palmares($conn){
     $query = "select  a.equipo, a.jugador, b.edicion          
    from (          
@@ -868,7 +1052,10 @@ function palmares($conn){
     echo "</table>";
 }
 
-
+/**
+ * Muestra en una lista las fechas de las ediciones.
+ * @param \mysqli $conn Conexión con la BD
+ */
 function fechasEdiciones($conn){
     $query = "select * from Edicion order by fecha desc;";
     $result = mysqli_query($conn, $query);
@@ -893,6 +1080,11 @@ function fechasEdiciones($conn){
     }
     echo "</table>";
 }
+
+/**
+ * Muestra en una tabla las veces que un usuario ha seleccionado a un equipo
+ * @param \mysqli $conn Conexión con la BD
+ */
 function equiposSeleccionadosPorUsuario($conn){
     $query = "select e.nombre, n.user, count(n.user) as veces_cogido          
    from Equipo as e          
@@ -937,6 +1129,10 @@ function equiposSeleccionadosPorUsuario($conn){
     }
     echo "</table>";
 }
+/**
+ * Muestra en una tablas los equipos seleccionados por los usuarios
+ * @param \mysqli $conn Conexión con la BD.
+ */
 function equiposSeleccionadosPorEdicion($conn){
     $query = "select e.nombre, n.user, n.edicion          
    from Equipo as e          
@@ -982,6 +1178,10 @@ function equiposSeleccionadosPorEdicion($conn){
     echo "</table>";
 }
 
+/**
+ * Muestra en una tabla las mayores goleadas en un partido.
+ * @param \mysqli $conn Conexión con la BD
+ */
 function goleadasPorPartido($conn){
     $query = "select max(m.goles) as maximo_goles_partido, e.nombre, m.tipo, m.num_ed, m.edicion, m.user, m.id
    from (          
@@ -1039,6 +1239,10 @@ function goleadasPorPartido($conn){
     }
     echo "</table>";
 }
+/**
+ * Muestra en una tabla las mayores goleadas en una edición
+ * @param \mysqli $conn Conexión con la BD
+ */
 function goleadasPorEdicion($conn){
     $query = "select n.edicion, sum(n.goles) as suma_goles_edicion, e.nombre as equipo, n.usuario          
    from Equipo as e          
@@ -1089,6 +1293,10 @@ function goleadasPorEdicion($conn){
     }
     echo "</table>";
 }
+/**
+ * Veces en que un usuario ha ganado con un mismo equipo
+ * @param \mysqli $conn Conexión con la BD
+ */
 function palmaresEquipoUsuario($conn){
     $query = "select count(a.partido) as BC_ganadas_equipo_jugador, a.equipo, a.jugador          
    from (          
@@ -1162,6 +1370,11 @@ function palmaresEquipoUsuario($conn){
     }
     echo "</table>";
 }
+/**
+ * Muestra todos los equipos seleccionados en cada edición
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ */
 function equiposSeleccionadosUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select distinct e.nombre, n.edicion
@@ -1204,7 +1417,11 @@ order by n.edicion desc;";
     echo "</table>";
 }
 
-
+/**
+ * Muestra en una tabla las finales jugadas por cada usuario
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ */
 function finalesUsuario($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select m.partido
@@ -1226,6 +1443,11 @@ function finalesUsuario($conn, $usuario){
     }
     echo "</table>";
 }
+/**
+ * Muestra una tabla con los goles encajados en cada edición a un usuario.
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $usuario ID del usuario
+ */
 function golesEncajadosUsuarioEdicion($conn, $usuario){
     $nombre = getUsuarioFromID($conn, $usuario);
     $query = "select sum(b.goles) as suma_goles, b.edicion
@@ -1268,6 +1490,11 @@ order by suma_goles desc limit 10;";
     }
     echo "</table>";
 }
+/**
+ * Muestra una tabla con los goles marcados por cada  usuaruo con un mismo equipo
+ * @param \mysqli $conn Conexión con la BD
+ * @param integer $equipo ID del equipos
+ */
 function golesEquipoEdicionUsuario($conn, $equipo){
     $nombre = getNombreEquipo($conn, $equipo);
     $query = "select a.edicion, sum(a.goles) as suma_goles_edicion, a.equipo, b.usuario     
