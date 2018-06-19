@@ -271,3 +271,18 @@ p {
     background-color: #00001a;
     color: white;
 }
+
+/* Cumple con todos los que tienen id=... */
+#patch {
+    background-image:url(patch.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    color: white;
+    font-family: UCL;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 42px;
+    height: 200px;
+    width: 200px;
+}

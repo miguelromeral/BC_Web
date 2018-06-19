@@ -393,11 +393,35 @@ function estadisticasJugador($conn, $jugador){
     
     ?>
 <h1><!-- Nombre del usuario --><?= getUsuarioFromID($conn, $jugador) ?></h1>
-<table>
-    <tr>
-        <td id="td_ucl_blue">Títulos</td>
-        <td id="td_ucl_white_bold" style="font-size: 46px;"><?= getCampeonatosUsuario($conn, $jugador) ?></td>
-    </tr>
+
+<?php
+$titulos = getCampeonatosUsuario($conn, $jugador);
+
+if ($titulos > 2){
+    ?>
+        <table>
+            <tr>
+                <td id="patch">
+                    <?= $titulos ?>
+                </td>
+            </tr>
+        </table>
+
+        <table cellpadding="-1">
+    <?php
+}else{
+    ?>
+            
+<table cellpadding="-1">
+        <tr>
+            <td id="td_ucl_blue">Títulos</td>
+            <td id="td_ucl_white_bold" style="font-size: 46px;"><?= getCampeonatosUsuario($conn, $jugador) ?></td>
+        </tr>
+
+    <?php
+}
+?>
+
     <tr>
         <td id="td_ucl_blue">Último título</td>
         <td id="td_ucl_white"><?php $fec = getUltimaUsuario($conn, $jugador);
@@ -519,11 +543,34 @@ function estadisticasEquipo($conn, $equipo){
     ?>
         <?php getImagenEquipoID($conn, $equipo, 0.5); ?>
 <h1><?= getNombreEquipo($conn, $equipo) ?></h1>
+
+<?php
+$titulos = getCampeonatosEquipo($conn, $equipo);
+
+if ($titulos > 2){
+    ?>
+        <table>
+            <tr>
+                <td id="patch">
+                    <?= $titulos ?>
+                </td>
+            </tr>
+        </table>
+
+        <table cellpadding="-1">
+    <?php
+}else{
+    ?>
+            
 <table cellpadding="-1">
-    <tr>
-        <td id="td_ucl_blue">Campeonatos</td>
-        <td id="td_ucl_white_bold" style="font-size: 46px;"><?= getCampeonatosEquipo($conn, $equipo) ?></td>
-    </tr>
+        <tr>
+            <td id="td_ucl_blue">Campeonatos</td>
+            <td id="td_ucl_white_bold" style="font-size: 46px;"><?= $titulos ?></td>
+        </tr>
+
+    <?php
+}
+?>
     <tr>
         <td id="td_ucl_blue">Último título</td>
         <td id="td_ucl_white"><?php $fec = getUltimaEquipo($conn, $equipo);
